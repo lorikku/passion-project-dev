@@ -7,14 +7,14 @@ Het is namelijk totaal niet waar dat deze mensen geen dromen hebben, ze onthoude
 
 ## Core Project Statement
 
-Een native iOS app dat mensen zal assisteren om beter hun dromen te onthouden EN in het bijzonder 'lucide dromen' te ervaren. De app zal hun slaapritme snachts tracken en op verschillende manieren de gebruiker aanleren hoe ze hun dromen kunnen onthouden en de optie om de dromen bij te houden in de app.
+Een Expo React Native app dat mensen zal assisteren om beter hun dromen te onthouden EN in het bijzonder 'lucide dromen' te ervaren. De app zal hun slaapritme snachts tracken en op verschillende manieren de gebruiker aanleren hoe ze hun dromen kunnen onthouden en de optie om de dromen bij te houden in de app.
 
 ## Opsomming van de deliverables
 
 - Week 1: Research & app design
 - Week 2: Uitwerking van de algemene flow (navigatie, design)
-- Week 3: Integratie van de nodig native iOS API
-- Week 4: Koppeling van state management aan de app
+- Week 3: Integratie van de nodige native API
+- Week 4: Koppeling van redux state management aan de app
 - Week 5: Afwerking & indienen
 
 ## Blog Url
