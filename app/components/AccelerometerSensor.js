@@ -6,41 +6,16 @@ export default function AccelerometerSensor() {
   const [data, setData] = useState({});
 
   useEffect(() => {
-    _toggle();
-  }, []);
-
-  useEffect(() => {
-    return () => {
-      _unsubscribe();
-    };
-  }, []);
-
-  const _toggle = () => {
-    if (this._subscription) {
-      _unsubscribe();
-    } else {
-      _subscribe();
-    }
-  };
-
-  const _slow = () => {
-    Accelerometer.setUpdateInterval(1000);
-  };
-
-  const _fast = () => {
-    Accelerometer.setUpdateInterval(16);
-  };
-
-  const _subscribe = () => {
-    this._subscription = Accelerometer.addListener((accelerometerData) => {
+    const accelSub = Accelerometer.addListener((accelerometerData) => {
       setData(accelerometerData);
     });
-  };
 
-  const _unsubscribe = () => {
-    this._subscription && this._subscription.remove();
-    this._subscription = null;
-  };
+    if (accelSub) {
+      return function cleanup() {
+        accelSub.remove();
+      };
+    }
+  });
 
   let { x, y, z } = data;
   return (
@@ -51,20 +26,6 @@ export default function AccelerometerSensor() {
       <Text style={styles.text}>
         x: {round(x)} y: {round(y)} z: {round(z)}
       </Text>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={_toggle} style={styles.button}>
-          <Text>Toggle</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={_slow}
-          style={[styles.button, styles.middleButton]}
-        >
-          <Text>Slow</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={_fast} style={styles.button}>
-          <Text>Fast</Text>
-        </TouchableOpacity>
-      </View>
     </View>
   );
 }
