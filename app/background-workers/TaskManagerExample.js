@@ -9,15 +9,26 @@ const taskName = 'BACKGROUND_TEST';
 const taskEventName = 'BACKGROUND_UPDATE';
 const eventEmitter = new EventEmitter();
 
-const acceleormeterData = 1;
+// Configuring Accelerometer
+// Accelerometer.setUpdateInterval(16);
+// Accelerometer.addListener((data) => {
+//   acceleormeterData = data;
+// });
 
 TaskManager.defineTask(taskName, () => {
+  let acceleormeterData;
   try {
-    console.log('Data: ', acceleormeterData);
-    return acceleormeterData
-      ? BackgroundFetch.Result.NewData
-      : BackgroundFetch.Result.NoData;
+    const listener = Accelerometer.addListener((data) => {
+      acceleormeterData = data;
+      const { x, y, z } = data;
+      console.log('Data: ' + x + y + z);
+      listener.remove();
+      return acceleormeterData
+        ? BackgroundFetch.Result.NewData
+        : BackgroundFetch.Result.NoData;
+    });
   } catch (err) {
+    console.log(err);
     return BackgroundFetch.Result.Failed;
   }
 });

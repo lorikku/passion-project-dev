@@ -1,30 +1,25 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import AccelerometerSensor from './components/AccelerometerSensor';
-import TaskManagerExample from './components/TaskManagerExample';
+import BackgroundTaskTest from './components/BackgroundTaskTest';
+import TaskManagerExample from './background-workers/TaskManagerExample';
+import { Accelerometer } from 'expo-sensors';
+import { Provider } from 'react-redux';
+import store from './store';
+import DataList from './components/DataList';
 
 export default function App() {
-  // const [timer, setTimer] = useState(0);
-  // const [test, setTest] = useState(false);
-
-  // useEffect(() => {
-  //   const interval = setTimeout(() => {
-  //     setTimer(timer + 1);
-  //     console.log(test);
-  //     setTest(!test);
-  //   }, 1000);
-  //   return () => {
-  //     clearInterval(interval);
-  //   };
-  // });
-
   return (
-    <View style={styles.container}>
-      {/* <TaskManagerExample /> */}
-      <AccelerometerSensor />
-      <StatusBar style="auto" />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <Provider store={store}>
+          {/* <TaskManagerExample /> */}
+          <AccelerometerSensor />
+          <DataList />
+          {/* <BackgroundTaskTest /> */}
+          <StatusBar style="auto" />
+      </Provider>
+    </SafeAreaView>
   );
 }
 

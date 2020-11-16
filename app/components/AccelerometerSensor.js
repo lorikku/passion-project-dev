@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { Accelerometer } from 'expo-sensors';
+import { useDispatch } from 'react-redux';
+import { addData } from '../store/trackerSlice';
+
+Accelerometer.setUpdateInterval(1000);
 
 export default function AccelerometerSensor() {
   const [data, setData] = useState({});
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const accelSub = Accelerometer.addListener((accelerometerData) => {
       setData(accelerometerData);
+      dispatch(addData(data));
     });
 
     if (accelSub) {
@@ -24,18 +30,10 @@ export default function AccelerometerSensor() {
         Accelerometer: (in Gs where 1 G = 9.81 m s^-2)
       </Text>
       <Text style={styles.text}>
-        x: {round(x)} y: {round(y)} z: {round(z)}
+        x: {x} y: {y} z: {z}
       </Text>
     </View>
   );
-}
-
-function round(n) {
-  if (!n) {
-    return 0;
-  }
-
-  return Math.floor(n * 1000) / 1000;
 }
 
 const styles = StyleSheet.create({
