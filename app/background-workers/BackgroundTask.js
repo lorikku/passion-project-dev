@@ -4,6 +4,7 @@ import { WebView } from 'react-native-webview';
 export default function BackgroundTask(props) {
   return (
     <WebView
+      style={{ height: 0 }}
       onMessage={props.function}
       source={{
         html: `<script>

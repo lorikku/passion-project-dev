@@ -7,11 +7,12 @@ import { addData } from '../store/trackerSlice';
 Accelerometer.setUpdateInterval(1000);
 
 export default function AccelerometerSensor() {
-  const [data, setData] = useState({});
+  const [data, setData] = useState({ x: 0, y: 0, z: 0 });
   const dispatch = useDispatch();
 
   useEffect(() => {
     const accelSub = Accelerometer.addListener((accelerometerData) => {
+      console.log('data added');
       setData(accelerometerData);
       dispatch(addData(data));
     });
@@ -23,42 +24,5 @@ export default function AccelerometerSensor() {
     }
   });
 
-  let { x, y, z } = data;
-  return (
-    <View style={styles.sensor}>
-      <Text style={styles.text}>
-        Accelerometer: (in Gs where 1 G = 9.81 m s^-2)
-      </Text>
-      <Text style={styles.text}>
-        x: {x} y: {y} z: {z}
-      </Text>
-    </View>
-  );
+  return null;
 }
-
-const styles = StyleSheet.create({
-  buttonContainer: {
-    flexDirection: 'row',
-    alignItems: 'stretch',
-    marginTop: 15,
-  },
-  button: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#eee',
-    padding: 10,
-  },
-  middleButton: {
-    borderLeftWidth: 1,
-    borderRightWidth: 1,
-    borderColor: '#ccc',
-  },
-  sensor: {
-    marginTop: 45,
-    paddingHorizontal: 10,
-  },
-  text: {
-    textAlign: 'center',
-  },
-});

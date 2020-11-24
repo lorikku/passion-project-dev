@@ -1,13 +1,13 @@
 import * as React from 'react';
-import { Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
-import { selectTracker, addData } from '../store/trackerSlice';
+import { Text, View } from 'react-native';
+import { useSelector } from 'react-redux';
+import { selectTracker } from '../store/trackerSlice';
 
 export default function DataList() {
-  const dispatch = useDispatch();
   const data = useSelector(selectTracker);
   return (
     <View>
+      <Text>Accelerometer data (per second):</Text>
       {data.map((el) => (
         <Text key={el.id}>{`${el.x}`}</Text>
       ))}

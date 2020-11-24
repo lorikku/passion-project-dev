@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import * as TaskManager from 'expo-task-manager';
 import * as BackgroundFetch from 'expo-background-fetch';
 import { EventEmitter } from 'fbemitter';
 import { Text } from 'react-native';
 import { Accelerometer } from 'expo-sensors';
+
+/* THIS IS NOT USED ANYMORE */
 
 const taskName = 'BACKGROUND_TEST';
 const taskEventName = 'BACKGROUND_UPDATE';

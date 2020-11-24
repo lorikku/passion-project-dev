@@ -1,29 +1,29 @@
 import { createSlice, nanoid } from '@reduxjs/toolkit';
 
-//Voorbeeld 'starter state'
+//Initial state is an empty array which will contain objects with accelerometer data
 const initialState = [];
 
-/* De redux toolkit slice, die andere reducers combineert en in 
-1 grote reducer steekt dat zich als het ware 
-als een 'slice' van de root reducer gedraagt */
+/* Defining trackerSlice with reducer functions for adding 
+accelerometer results to store */
 export const trackerSlice = createSlice({
   name: 'tracker',
   initialState,
   reducers: {
     addData: (state, action) => {
-        state.push({
-          id: nanoid(),
-          ...action.payload,
-        });
+      state.push({
+        id: nanoid(),
+        ...action.payload,
+      });
+      console.log(action.payload.x);
     },
   },
 });
 
-//Action types exporten om een dispatch te kunnen uitvoeren naar de juiste reducer
+//Export reducer functions to use it in dispatch in components
 export const { addData } = trackerSlice.actions;
 
-//Een select functie die de store 'select query' returnt om te gebruiken bij useSelector()
+//Select tracker query to read data from tracker state
 export const selectTracker = (store) => store.tracker;
 
-//De 'sliced' reducer die ge-export wordt om toe te voegen aan de globale store
+//Export reducer to import in store
 export default trackerSlice.reducer;
