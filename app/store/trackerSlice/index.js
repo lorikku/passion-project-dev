@@ -9,7 +9,7 @@ export const trackerSlice = createSlice({
   name: 'tracker',
   initialState,
   reducers: {
-    addData: (state, action) => {
+    addAccelData: (state, action) => {
       state.push({
         id: nanoid(),
         ...action.payload,
@@ -20,7 +20,7 @@ export const trackerSlice = createSlice({
 });
 
 //Export reducer functions to use it in dispatch in components
-export const { addData } = trackerSlice.actions;
+export const { addAccelData } = trackerSlice.actions;
 
 //Select tracker query to read data from tracker state
 export const selectTracker = (store) => store.tracker;

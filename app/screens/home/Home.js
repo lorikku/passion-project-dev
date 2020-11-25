@@ -11,7 +11,7 @@ export default Home = ({ navigation, props }) => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'red',
+    backgroundColor: '#fff',
     paddingBottom: 30,
   },
 });

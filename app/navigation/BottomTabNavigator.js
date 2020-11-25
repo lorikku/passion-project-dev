@@ -7,11 +7,14 @@ import ExampleScreen from '../screens/example';
 import { Text, Keyboard } from 'react-native';
 
 import globalStyles from '../styles';
+import { useSelector } from 'react-redux';
+import { selectUi } from '../store/uiSlice';
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Home';
 
 export default function BottomTabNavigator({ navigation, route }) {
+  const ui = useSelector(selectUi);
   //Hide bottom navigation on keyboard show and vice versa
   const [visibleNav, setNavVisible] = React.useState(true);
   Keyboard.addListener('keyboardWillShow', () => setNavVisible(false));
@@ -21,11 +24,13 @@ export default function BottomTabNavigator({ navigation, route }) {
     <BottomTab.Navigator
       tabBarOptions={{
         style: {
-          opacity: !visibleNav ? 0 : 1,
-          paddingTop: !visibleNav ? 0 : 10,
-          height: !visibleNav ? 0 : 90,
-          paddingBottom: 30,
+          opacity: !visibleNav || !ui.visibleNav ? 0 : 1,
+          paddingTop: !visibleNav || !ui.visibleNav ? 0 : 10,
+          height: !visibleNav || !ui.visibleNav ? 0 : 90,
+          paddingBottom: !visibleNav || !ui.visibleNav ? 0 : 30,
           backgroundColor: globalStyles.color.background,
+          borderTopWidth: 0,
+          borderBottomWidth: 0,
         },
       }}
       initialRouteName={INITIAL_ROUTE_NAME}

@@ -31,9 +31,6 @@
       "package": "be.lorikku.lucidy",
       "versionCode": 1
     },
-    "androidStatusBar": {
-      "backgroundColor": "#011521"
- },
     "androidNavigationBar": {
       "barStyle": "dark-content",
       "backgroundColor": "#022234"

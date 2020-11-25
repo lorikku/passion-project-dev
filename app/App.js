@@ -5,7 +5,7 @@ import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
 import { AppLoading } from 'expo';
 
 import { Provider } from 'react-redux';
-import store from './store';
+import store from './store/store';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -13,6 +13,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import BottomTabNavigator from './navigation/BottomTabNavigator';
 import useLinking from './navigation/useLinking';
 
+import * as Font from 'expo-font';
 import globalStyles from './styles';
 
 const Stack = createStackNavigator();
@@ -31,12 +32,11 @@ export default function App(props) {
         // Load our initial navigation state
         setInitialNavigationState(await getInitialState());
 
-        // // Load fonts
-        // await Font.loadAsync({
-        //   ...Ionicons.font,
-        //   'lato-regular': require('./assets/fonts/Lato-Regular.ttf'),
-        //   'lato-semi': require('./assets/fonts/Lato-Bold.ttf'),
-        // });
+        // Load fonts
+        await Font.loadAsync({
+          sfProRoundedBold: require('./assets/fonts/SF-Pro-Rounded-Bold.ttf'),
+          sfProRoundedRegular: require('./assets/fonts/SF-Pro-Rounded-Regular.ttf'),
+        });
       } catch (e) {
         // We might want to provide this error information to an error reporting service
         console.warn(e);
@@ -79,9 +79,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: globalStyles.color.background,
     paddingTop: Platform.OS === 'android' ? 28 : 0,
+    paddingBottom: Platform.OS === 'ios' ? 30 : 0,
   },
   statusBar: {
-    height: Platform.OS === 'ios' ? 40 : 0,
     zIndex: 99,
   },
 });

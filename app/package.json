@@ -16,6 +16,7 @@
     "@reduxjs/toolkit": "^1.1.0",
     "expo": "~39.0.2",
     "expo-background-fetch": "~8.5.0",
+    "expo-font": "~8.3.0",
     "expo-linking": "^1.0.5",
     "expo-sensors": "~9.1.0",
     "expo-splash-screen": "~0.6.2",
@@ -28,6 +29,7 @@
     "react-native-reanimated": "~1.13.0",
     "react-native-safe-area-context": "3.1.4",
     "react-native-screens": "~2.10.1",
+    "react-native-svg": "12.1.0",
     "react-native-web": "~0.13.12",
     "react-native-webview": "10.7.0",
     "react-redux": "^7.1.3"
