@@ -2,8 +2,7 @@ import * as React from 'react';
 
 import { createStackNavigator } from '@react-navigation/stack';
 
-import Home from './Home';
-import Intro from './Intro';
+import Diary from './Diary';
 
 const Stack = createStackNavigator();
 
@@ -11,15 +10,8 @@ export default () => {
   return (
     <Stack.Navigator headerMode="none">
       <Stack.Screen
-        name="Intro"
-        component={Intro}
-        options={{
-          gestureEnabled: false,
-        }}
-      />
-      <Stack.Screen
-        name="Home"
-        component={Home}
+        name="Diary"
+        component={Diary}
         options={{
           gestureEnabled: false,
         }}

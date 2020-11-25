@@ -54,7 +54,11 @@ export default function App(props) {
     return (
       <Provider store={store}>
         <View style={styles.statusBar}>
-          <StatusBar translucent style="inverted" />
+          <StatusBar
+            translucent
+            style="inverted"
+            backgroundColor={'transparent'}
+          />
         </View>
         <KeyboardAvoidingView
           style={styles.container}
@@ -78,7 +82,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: globalStyles.color.background,
-    paddingTop: Platform.OS === 'android' ? 28 : 0,
     paddingBottom: Platform.OS === 'ios' ? 30 : 0,
   },
   statusBar: {

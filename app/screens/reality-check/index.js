@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { createStackNavigator } from '@react-navigation/stack';
 
-import Example from './Example';
+import RealityCheck from './RealityCheck';
 
 const Stack = createStackNavigator();
 
@@ -10,8 +10,8 @@ export default () => {
   return (
     <Stack.Navigator headerMode="none">
       <Stack.Screen
-        name="Example"
-        component={Example}
+        name="RealityCheck"
+        component={RealityCheck}
         options={{
           gestureEnabled: false,
         }}

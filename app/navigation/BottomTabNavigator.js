@@ -1,17 +1,21 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import * as React from 'react';
 
-import HomeScreen from '../screens/home';
-import ExampleScreen from '../screens/example';
+import RealityCheckScreen from '../screens/reality-check';
+import SleepScreen from '../screens/sleep';
+import DiaryScreen from '../screens/diary';
 
-import { Text, Keyboard } from 'react-native';
+import { Keyboard } from 'react-native';
 
 import globalStyles from '../styles';
 import { useSelector } from 'react-redux';
 import { selectUi } from '../store/uiSlice';
+import RealityCheckNav from '../components/svg/nav/RealityCheckNav';
+import SleepNav from '../components/svg/nav/SleepNav';
+import DiaryNav from '../components/svg/nav/DiaryNav';
 
 const BottomTab = createBottomTabNavigator();
-const INITIAL_ROUTE_NAME = 'Home';
+const INITIAL_ROUTE_NAME = 'SleepScreen';
 
 export default function BottomTabNavigator({ navigation, route }) {
   const ui = useSelector(selectUi);
@@ -24,41 +28,58 @@ export default function BottomTabNavigator({ navigation, route }) {
     <BottomTab.Navigator
       tabBarOptions={{
         style: {
-          opacity: !visibleNav || !ui.visibleNav ? 0 : 1,
-          paddingTop: !visibleNav || !ui.visibleNav ? 0 : 10,
-          height: !visibleNav || !ui.visibleNav ? 0 : 90,
-          paddingBottom: !visibleNav || !ui.visibleNav ? 0 : 30,
+          opacity: !visibleNav || ui.fullScreen ? 0 : 1,
+          paddingTop: !visibleNav || ui.fullScreen ? 0 : 10,
+          height: !visibleNav || ui.fullScreen ? 0 : 90,
+          paddingBottom: !visibleNav || ui.fullScreen ? 0 : 30,
           backgroundColor: globalStyles.color.background,
           borderTopWidth: 0,
           borderBottomWidth: 0,
+          elevation: 0,
         },
       }}
       initialRouteName={INITIAL_ROUTE_NAME}
     >
       <BottomTab.Screen
-        name="Home"
-        component={HomeScreen}
+        name="RealityCheckScreen"
+        component={RealityCheckScreen}
         listeners={({ navigation }) => ({
           tabPress: (e) => {
-            navigation.navigate('Home');
+            navigation.navigate('RealityCheckScreen');
           },
         })}
         options={{
-          title: 'Home',
-          tabBarLabel: ({ focused }) => <Text>Home</Text>,
+          title: 'Reality Check',
+          tabBarIcon: ({ focused }) => <RealityCheckNav focused={focused} />,
+          tabBarLabel: () => null,
         }}
       />
       <BottomTab.Screen
-        name="Example"
-        component={ExampleScreen}
+        name="SleepScreen"
+        component={SleepScreen}
         listeners={({ navigation }) => ({
           tabPress: (e) => {
-            navigation.navigate('Example');
+            navigation.navigate('SleepScreen');
           },
         })}
         options={{
-          title: 'Example',
-          tabBarLabel: ({ focused }) => <Text>Example</Text>,
+          title: 'Sleep',
+          tabBarIcon: ({ focused }) => <SleepNav focused={focused} />,
+          tabBarLabel: () => null,
+        }}
+      />
+      <BottomTab.Screen
+        name="DiaryScreen"
+        component={DiaryScreen}
+        listeners={({ navigation }) => ({
+          tabPress: (e) => {
+            navigation.navigate('DiaryScreen');
+          },
+        })}
+        options={{
+          title: 'Diary',
+          tabBarLabel: () => null,
+          tabBarIcon: ({ focused }) => <DiaryNav focused={focused} />,
         }}
       />
     </BottomTab.Navigator>

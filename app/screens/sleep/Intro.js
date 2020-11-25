@@ -7,12 +7,13 @@ import ArrowRight from '../../components/svg/elements/ArrowRight';
 import globalStyles from '../../styles';
 
 import { useDispatch } from 'react-redux';
-import { toggleNav } from '../../store/uiSlice';
+import { disableFirstTime } from '../../store/uiSlice';
 
 export default Intro = ({ navigation, props }) => {
   const dispatch = useDispatch();
   const onStartPress = () => {
-    dispatch(toggleNav());
+    dispatch(disableFirstTime());
+    navigation.navigate('Sleep');
   };
   return (
     <View style={styles.container}>
