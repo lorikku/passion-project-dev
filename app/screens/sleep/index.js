@@ -27,6 +27,7 @@ export default () => {
         component={Sleep}
         options={{
           gestureEnabled: false,
+          animationEnabled: false,
         }}
       />
     </Stack.Navigator>

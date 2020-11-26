@@ -36,6 +36,7 @@ export default function App(props) {
         await Font.loadAsync({
           sfProRoundedBold: require('./assets/fonts/SF-Pro-Rounded-Bold.ttf'),
           sfProRoundedRegular: require('./assets/fonts/SF-Pro-Rounded-Regular.ttf'),
+          sfProCompactRegular: require('./assets/fonts/SF-Compact-Rounded-Regular.otf'),
         });
       } catch (e) {
         // We might want to provide this error information to an error reporting service

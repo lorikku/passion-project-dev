@@ -12,8 +12,8 @@ export const trackerSlice = createSlice({
   name: 'tracker',
   initialState,
   reducers: {
-    toggleTracker: (state, action) => {
-      state.activeTracker = action.payload;
+    toggleTracker: (state) => {
+      state.activeTracker = !state.activeTracker;
     },
     addAccelData: (state, action) => {
       state.data.push({
