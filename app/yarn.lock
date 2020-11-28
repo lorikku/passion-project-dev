@@ -2565,6 +2565,11 @@ expo-background-fetch@~8.5.0:
   dependencies:
     expo-task-manager "~8.5.0"
 
+expo-brightness@~8.3.0:
+  version "8.3.0"
+  resolved "https://registry.yarnpkg.com/expo-brightness/-/expo-brightness-8.3.0.tgz#7bda6272ce7e2ecefa0196919a964841ce2834c9"
+  integrity sha512-HIZqQhVVJmkYrDt4mcJ3cpdzQoxdHYLQsD1My/YQUaSCTNQwNulezSQ2a7zFQ2eu1W76uxAEgvTb/oVT4REpsQ==
+
 expo-constants@~9.2.0:
   version "9.2.0"
   resolved "https://registry.yarnpkg.com/expo-constants/-/expo-constants-9.2.0.tgz#e86a38793deaff9018878afac65bce2543c80a4c"

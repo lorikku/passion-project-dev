@@ -8,7 +8,7 @@ const globalStyles = {
   },
   text: {
     title: { fontFamily: 'sfProRoundedBold', fontSize: 80 },
-    subTitle: { fontFamily: 'sfProRoundedBold', fontSize: 50 },
+    subTitle: { fontFamily: 'sfProRoundedBold', fontSize: 40, paddingTop: 30 },
     compact: { fontFamily: 'sfProCompactRegular', fontSize: 40 },
     default: { fontFamily: 'sfProRoundedRegular', fontSize: 22 },
   },

@@ -16,11 +16,7 @@ export default function AccelerometerSensor() {
       dispatch(addAccelData(data));
     });
 
-    if (accelSub) {
-      return function cleanup() {
-        accelSub.remove();
-      };
-    }
+    return () => accelSub.remove();
   });
 
   return null;

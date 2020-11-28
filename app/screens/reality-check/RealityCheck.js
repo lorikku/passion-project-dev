@@ -5,7 +5,7 @@ import globalStyles from '../../styles';
 export default RealityCheck = ({ navigation, props }) => {
   return (
     <View style={styles.container}>
-      <Text>Checklist</Text>
+      <Text style={styles.subtitle}>Reality Checks</Text>
     </View>
   );
 };
@@ -15,5 +15,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: globalStyles.color.background,
     ...globalStyles.spacer.safePadding,
+    alignItems: 'center'
   },
+  subtitle: {
+    ...globalStyles.text.subTitle,
+    color: globalStyles.color.white,
+  }
 });

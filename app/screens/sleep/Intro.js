@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import * as Brightness from 'expo-brightness';
 
 import IntroBg from '../../components/svg/intro/IntroBg';
 import ArrowRight from '../../components/svg/elements/ArrowRight';
@@ -12,8 +13,21 @@ import { disableFirstTime } from '../../store/uiSlice';
 export default Intro = ({ navigation, props }) => {
   const dispatch = useDispatch();
   const onStartPress = () => {
-    dispatch(disableFirstTime());
-    navigation.navigate('Sleep');
+    Alert.alert(
+      'Permissions',
+      'Lucidy needs permissions to write system settings. We use this to edit your brightness level when tracking your sleep. This would drastically save your battery life.',
+      [
+        {
+          text: 'Give permission',
+          onPress: () => {
+            Brightness.requestPermissionsAsync().then(() =>
+              dispatch(disableFirstTime())
+            );
+          },
+        },
+      ],
+      { cancelable: false }
+    );
   };
   return (
     <View style={styles.container}>
