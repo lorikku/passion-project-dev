@@ -18,7 +18,7 @@ export default Intro = ({ navigation, props }) => {
       'Lucidy needs permissions to write system settings. We use this to edit your brightness level when tracking your sleep. This would drastically save your battery life.',
       [
         {
-          text: 'Give permission',
+          text: 'Give permissions',
           onPress: () => {
             Brightness.requestPermissionsAsync().then(() =>
               dispatch(disableFirstTime())
@@ -60,7 +60,8 @@ const styles = StyleSheet.create({
   text: {
     ...globalStyles.text.default,
     color: globalStyles.color.white,
-    marginRight: 10,
+    marginRight: 10, 
+    fontSize: 22 
   },
   button: {
     flexDirection: 'row',

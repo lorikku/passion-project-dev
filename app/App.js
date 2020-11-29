@@ -16,6 +16,18 @@ import useLinking from './navigation/useLinking';
 import * as Font from 'expo-font';
 import globalStyles from './styles';
 
+import {setNotificationHandler} from 'expo-notifications';
+//Basic notification handler which gets called whenever a new notification is about to be triggered
+setNotificationHandler({
+  handleNotification: async () => {
+    return {
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: true,
+    };
+  },
+});
+
 const Stack = createStackNavigator();
 
 export default function App(props) {

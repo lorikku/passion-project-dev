@@ -73,5 +73,6 @@ const styles = StyleSheet.create({
   timer: {
     ...globalStyles.text.compact,
     color: globalStyles.color.yellow,
+    fontSize: 40
   },
 });

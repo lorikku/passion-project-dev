@@ -1,4 +1,5 @@
-import { createSlice, nanoid } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
+
 
 //Initial state is an empty array which will contain objects with accelerometer data
 const initialState = {
@@ -15,18 +16,16 @@ export const trackerSlice = createSlice({
     toggleTracker: (state) => {
       state.activeTracker = !state.activeTracker;
     },
-    addAccelData: (state, action) => {
+    addTrackerData: (state, action) => {
       state.data.push({
-        id: nanoid(),
         ...action.payload,
       });
-      console.log(action.payload.x);
     },
   },
 });
 
 //Export reducer functions to use it in dispatch in components
-export const { toggleTracker, addAccelData } = trackerSlice.actions;
+export const { toggleTracker, addTrackerData } = trackerSlice.actions;
 
 //Select tracker query to read data from tracker state
 export const selectTracker = (store) => store.tracker;
