@@ -20,7 +20,7 @@ export default TrackerHandler = ({ active }) => {
     //If tracker is active
     if (active) {
       /*
-      Basic JS setTimeout/setInterval or any other types of interval-based-functions are not reliable in comparison to the actual real-life time
+      Basic JS setTimeout/setInterval or any other types of interval-based-functions/listeners are not reliable in comparison to the actual real-life time
       After a while of running the listeners (based off of an interval), the interval is drifted from the actual time (14:20 on the clock -> 14:14 in the app)
       Because of this, I came up with a solution that calculates the drift between 2 listeners, based off of Date.milliseconds , which cancel each other out and removes the drift
       */
@@ -32,7 +32,7 @@ export default TrackerHandler = ({ active }) => {
           start = date.getTime();
           nextAt = start;
         }
-         //The time of nextAt gets increased by the acceleroInterval, which explains to "I expect a new listener at current date (date.getTime()) + the interval"
+        //The date of nextAt gets increased by the acceleroInterval, which explains to "I expect a new listener at current date + the interval"
         nextAt += acceleroInterval;
 
         //Here, the "start" variable gets used JUST for debugging purposes, so the amount of drift can be seen in the console (0 meaning no drift)
@@ -40,7 +40,11 @@ export default TrackerHandler = ({ active }) => {
         // console.log(drift);
         
         //The "timer" variable gets increased by the calculated acceleroInterval (compensating for the drift) (in milliseconds)
-        setTimer(timer + calculatedAcceleroInterval / 1000);
+        setTimer(timer + calculatedAcceleroInterval);
+        console.log({
+          data: accelerometerData,
+          timespan: timer
+        })
 
         //The "calculatedAcceleroInterval" state gets changed to the difference between the 'expected' NEXT time listener will run (nextAt) AND the current time, which eleminates the drift
         setCalculatedAcceleroInterval(nextAt - date.getTime());
@@ -50,9 +54,9 @@ export default TrackerHandler = ({ active }) => {
     } else {
       //If tracker is not active, set timer (back) to 0
       setTimer(0);
-      //If tracker is not active, set start (back) to 0
+      //If tracker is not active, set "start" (back) to 0
       start = undefined;
-      //If tracker is not active, set interval back to standard interval
+      //If tracker is not active, set "calculatedAcceleroInterval" back to standard interval
       setCalculatedAcceleroInterval(acceleroInterval);
     }
   });

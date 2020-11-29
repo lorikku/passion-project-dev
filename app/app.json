@@ -29,7 +29,8 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "be.lorikku.lucidy",
-      "versionCode": 1
+      "versionCode": 1,
+      "useNextNotificationsApi": true
     },
     "androidNavigationBar": {
       "barStyle": "dark-content",
