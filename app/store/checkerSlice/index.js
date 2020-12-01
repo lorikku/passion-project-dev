@@ -1,31 +1,45 @@
 import { createSlice } from '@reduxjs/toolkit';
+//Importing async thunks from other file
+import {addRealityCheckThunk, toggleRealityCheckThunk} from './asyncThunks'
 
-//Initial state is an empty array which will contain objects with accelerometer data
+/* SLICE CREATOR */
+//Initial state is an empty array which will contain objects with notification data
 const initialState = [];
 
 /* Defining checkerSlice with reducer functions for adding 
-accelerometer results to store */
+currently scheduled notifications to store */
 export const checkerSlice = createSlice({
   name: 'checker',
   initialState,
   reducers: {
-    addRealityCheck: (state, action) => {
-      state.push(action.payload);
-    },
     deleteCheckerById: (state, action) => {
       const index = state.findIndex((_, index) => index === action.payload);
       if(index !== -1) {
         state.splice(index, index + 1);
       }
-      console.log(state);
     }
   },
+  extraReducers: {
+    [addRealityCheckThunk.fulfilled]: (state, action) => {
+      state.push(action.payload);
+    },
+    [toggleRealityCheckThunk.fulfilled]: (state, action) => {
+      const check = state.find((el) => el.id === action.payload);
+      if(check){
+        check.active = !check.active;
+      }
+    },
+  }
 });
 
+/* EXPORTS */
 //Export reducer functions to use it in dispatch in components
-export const { addRealityCheck, deleteCheckerById } = checkerSlice.actions;
+export const { deleteCheckerById } = checkerSlice.actions;
 
-//Select checker query to read data from checker state
+//Export thunk thunk functions with normalized names
+export {addRealityCheckThunk as addRealityCheck, toggleRealityCheckThunk as toggleRealityCheck};
+
+//Export select checker query to read data from checker state
 export const selectChecker = (store) => store.checker;
 
 //Export reducer to import in store

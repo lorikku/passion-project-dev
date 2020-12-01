@@ -17,7 +17,7 @@ import * as Font from 'expo-font';
 import globalStyles from './styles';
 
 import {setNotificationHandler} from 'expo-notifications';
-//Basic notification handler which gets called whenever a new notification is about to be triggered
+//Basic notification handler which gets called whenever a new notification is about to be triggered (while app is in foreground)
 setNotificationHandler({
   handleNotification: async () => {
     return {
