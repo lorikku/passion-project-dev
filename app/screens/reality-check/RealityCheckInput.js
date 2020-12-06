@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {Platform, StyleSheet, Text, View} from 'react-native';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import {useDispatch} from 'react-redux';
 import BackIcon from '../../components/svg/elements/BackIcon';
@@ -40,26 +40,35 @@ export default RealityCheckInput = ({navigation}) => {
         </View>
       </View>
       <View style={styles.contentWrapper}>
-        <Text/>
+        <Text />
+        <View style={{alignItems: 'center'}}>
         <View>
-          <TextInput
-            style={styles.inputText}
-            placeholder={'Count your fingers '}
-            placeholderTextColor={'rgba(216, 216, 216, 0.4)'}
-            value={body}
-            onChangeText={(text) => setBody(text)}
-          />
-          <View style={styles.pickerWrapper}>
-            <Picker
-              style={styles.inputPicker}
-              selectedValue={freq}
-              onValueChange={(value) => setFreq(value)}
-            >
-              <Picker.Item label={'Low Frequency'} value={'low'} />
-              <Picker.Item label={'Medium Frequency'} value={'medium'} />
-              <Picker.Item label={'High Frequency'} value={'high'} />
-            </Picker>
-            <Text style={styles.pickerDropdown}>v</Text>
+          <Text style={styles.labelText}>Write your reality check</Text>
+            <TextInput
+              style={styles.inputText}
+              placeholder={'Count your fingers '}
+              placeholderTextColor={'rgba(216, 216, 216, 0.4)'}
+              value={body}
+              onChangeText={(text) => setBody(text)}
+            />
+        </View>
+          <View >
+            <Text style={styles.labelText}>Select frequency</Text>
+            <View style={styles.pickerWrapper}>
+              <Picker
+                style={styles.inputPicker}
+                selectedValue={freq}
+                onValueChange={(value) => setFreq(value)}
+                itemStyle={styles.inputPicker}
+              >
+                <Picker.Item label={'Low Frequency'} value={'low'} />
+                <Picker.Item label={'Medium Frequency'} value={'medium'} />
+                <Picker.Item label={'High Frequency'} value={'high'} />
+              </Picker>
+              {Platform.OS === 'android' && (
+                <Text style={styles.pickerDropdown}>v</Text>
+              )}
+            </View>
           </View>
         </View>
         <TouchableOpacity style={styles.addButton} onPress={onAddRealityCheck}>
@@ -87,6 +96,7 @@ const styles = StyleSheet.create({
     ...globalStyles.text.subTitle,
     color: globalStyles.color.white,
     textAlign: "center",
+    paddingBottom: 10
   },
   backButton: {
     marginTop: 20,
@@ -104,13 +114,23 @@ const styles = StyleSheet.create({
     color: globalStyles.color.white,
     fontSize: 22,
     fontWeight: 'bold',
-    padding: 10,
+    paddingVertical: 10,
     borderBottomColor: globalStyles.color.white,
-    borderBottomWidth: 2
+    borderBottomWidth: 2,
+    minWidth: 200
+  },
+  labelText: {
+    ...globalStyles.text.default,
+    color: globalStyles.color.gray,
+    fontSize: 14,
+    marginTop: 50,
   },
   pickerWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginLeft: Platform.OS === 'android' ? -7 : 0,
+    marginTop: Platform.OS === 'android' ? -20 : 0,
+    minWidth: 200
   },
   inputPicker: {
     height: 100,

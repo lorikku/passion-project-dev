@@ -1,6 +1,6 @@
 const trackerTools = {
   //Interval for fetching accelerometer data
-  acceleroInterval: 150,
+  acceleroInterval: 300,
   //Formatting time
   formatTime: (time) => {
     const timeSec = time / 1000;

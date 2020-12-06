@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
     ...globalStyles.text.compact,
     color: globalStyles.color.white,
     fontSize: 20,
+    maxWidth: 200,
   },
   bodyText: {
     ...globalStyles.text.default,

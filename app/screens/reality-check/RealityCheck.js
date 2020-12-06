@@ -11,7 +11,19 @@ import AddIcon from '../../components/svg/elements/AddIcon';
 import BackIcon from '../../components/svg/elements/BackIcon';
 import CheckerList from '../../components/reality-check/CheckerList';
 import CheckerEmpty from '../../components/reality-check/CheckerEmpty';
-import {cancelAllScheduledNotificationsAsync} from 'expo-notifications';
+import {cancelAllScheduledNotificationsAsync, getPermissionsAsync, requestPermissionsAsync} from 'expo-notifications';
+
+//Requesting notification permissions (for iOS)
+getPermissionsAsync().then(resp => {
+    requestPermissionsAsync({
+      ios: {
+        allowAlert: true,
+        allowBadge: true,
+        allowSound: true,
+        allowAnnouncements: true,
+      },
+    });
+})
 
 export default RealityCheck = ({ navigation }) => {
   const checker = useSelector(selectChecker);
@@ -44,6 +56,7 @@ const styles = StyleSheet.create({
   subtitle: {
     ...globalStyles.text.subTitle,
     color: globalStyles.color.white,
+    paddingBottom: 10
   },
   contentWrapper: {
     flex: 1,

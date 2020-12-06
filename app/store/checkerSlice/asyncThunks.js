@@ -7,16 +7,16 @@ const titles = ['Are you dreaming?', 'Reality check!', 'Is this reality?'];
 
 //Notification triggers based off of selected frequency
 const triggers = {
-    low: {
-        seconds: 10
-    },
-    medium: {
-        minutes: 2
-    },
-    high: {
-        minutes: 5
-    }
-}
+  low: {
+    minutes: 10,
+  },
+  medium: {
+    minutes: 2,
+  },
+  high: {
+    seconds: 5,
+  }
+};
 
 /* Async function possible with Redux Thunk middleware. This makes it possible to dispatch async functions as 'payload creators', 
 which will then dispatch action types based off of the status of the async function (pending | fulfilled | rejected) */
@@ -31,7 +31,7 @@ export const addRealityCheckThunk = createAsyncThunk('checker/addRealityCheckAsy
 
   //Trigger settings for notification
   const trigger = {
-    ...triggers[freq.toLowerCase()],
+    ...triggers[freq],
     repeats: true,
   };
 
@@ -40,6 +40,7 @@ export const addRealityCheckThunk = createAsyncThunk('checker/addRealityCheckAsy
     content,
     trigger
   });
+  console.log(id);
   
   //This is the 'payload creator', returns the payload for the action
   return {
@@ -59,7 +60,7 @@ export const toggleRealityCheckThunk = createAsyncThunk('checker/toggleRealityCh
     } else {
         //If check was unactive, enable notification again (using same id)
         const trigger = {
-            ...triggers[freq.toLowerCase()],
+            ...triggers[freq],
             repeats: true,
           };
           
@@ -72,5 +73,3 @@ export const toggleRealityCheckThunk = createAsyncThunk('checker/toggleRealityCh
 
     return id;
 })
-
-export { triggers as checkTriggers };

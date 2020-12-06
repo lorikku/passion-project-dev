@@ -1,6 +1,9 @@
+import {nanoid} from '@reduxjs/toolkit';
 import {Accelerometer} from 'expo-sensors';
 import * as React from 'react';
 import { StyleSheet, Text } from 'react-native';
+import {useDispatch} from 'react-redux';
+import {addTrackerData} from '../../store/trackerSlice';
 import globalStyles from '../../styles';
 import trackerTools from './trackerTools';
 
@@ -10,6 +13,7 @@ let start;
 let nextAt;
 
 export default TrackerHandler = ({ active }) => {
+  const dispatch = useDispatch();
   const [timer, setTimer] = React.useState(0);
   const [calculatedAcceleroInterval, setCalculatedAcceleroInterval] = React.useState(acceleroInterval);
   const date = new Date();
@@ -41,10 +45,10 @@ export default TrackerHandler = ({ active }) => {
         
         //The "timer" variable gets increased by the calculated acceleroInterval (compensating for the drift) (in milliseconds)
         setTimer(timer + calculatedAcceleroInterval);
-        console.log({
-          data: accelerometerData,
-          timespan: timer
-        })
+        dispatch(addTrackerData({
+          data: accelerometerData.x,
+          elapsedTime: timer
+        }))
 
         //The "calculatedAcceleroInterval" state gets changed to the difference between the 'expected' NEXT time listener will run (nextAt) AND the current time, which eleminates the drift
         setCalculatedAcceleroInterval(nextAt - date.getTime());

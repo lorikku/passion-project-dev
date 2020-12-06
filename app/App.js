@@ -5,7 +5,7 @@ import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
 import { AppLoading } from 'expo';
 
 import { Provider } from 'react-redux';
-import store from './store/store';
+import {store, persistor} from './store/store';
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -17,6 +17,7 @@ import * as Font from 'expo-font';
 import globalStyles from './styles';
 
 import {setNotificationHandler} from 'expo-notifications';
+import {PersistGate} from 'redux-persist/integration/react';
 //Basic notification handler which gets called whenever a new notification is about to be triggered (while app is in foreground)
 setNotificationHandler({
   handleNotification: async () => {
@@ -66,26 +67,28 @@ export default function App(props) {
   } else {
     return (
       <Provider store={store}>
-        <View style={styles.statusBar}>
-          <StatusBar
-            translucent
-            style="inverted"
-            backgroundColor={'transparent'}
-          />
-        </View>
-        <KeyboardAvoidingView
-          style={styles.container}
-          behavior={Platform.Os == 'ios' ? 'padding' : 'height'}
-        >
-          <NavigationContainer
-            ref={containerRef}
-            initialState={initialNavigationState}
+        <PersistGate loading={null} persistor={persistor}>
+          <View style={styles.statusBar}>
+            <StatusBar
+              translucent
+              style="inverted"
+              backgroundColor={'transparent'}
+            />
+          </View>
+          <KeyboardAvoidingView
+            style={styles.container}
+            behavior={Platform.Os == 'ios' ? 'padding' : 'height'}
           >
-            <Stack.Navigator headerMode="none">
-              <Stack.Screen name="Root" component={BottomTabNavigator} />
-            </Stack.Navigator>
-          </NavigationContainer>
-        </KeyboardAvoidingView>
+            <NavigationContainer
+              ref={containerRef}
+              initialState={initialNavigationState}
+            >
+              <Stack.Navigator headerMode="none">
+                <Stack.Screen name="Root" component={BottomTabNavigator} />
+              </Stack.Navigator>
+            </NavigationContainer>
+          </KeyboardAvoidingView>
+        </PersistGate>
       </Provider>
     );
   }

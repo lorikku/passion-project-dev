@@ -17,9 +17,7 @@ export const trackerSlice = createSlice({
       state.activeTracker = !state.activeTracker;
     },
     addTrackerData: (state, action) => {
-      state.data.push({
-        ...action.payload,
-      });
+      state.data.push(action.payload);
     },
   },
 });
