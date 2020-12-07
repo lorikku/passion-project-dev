@@ -1,6 +1,8 @@
 const trackerTools = {
-  //Interval for fetching accelerometer data
-  acceleroInterval: 300,
+  //Interval for fetching accelerometer data (in ms)
+  acceleroInterval: 500,
+  //Interval for analysing data (in ms)
+  analyseInterval: 5/* s */ * 1000/* ms */ /* equals to 10 seconds */,
   //Formatting time
   formatTime: (time) => {
     const timeSec = time / 1000;
@@ -17,6 +19,11 @@ const trackerTools = {
     return res;
   },
 
+  generateFutureTime: (analyseInterval) => {
+    let date = new Date();
+    date.setTime(date.getTime() + analyseInterval);
+    return date.getTime();
+  },
 };
 
 export default trackerTools;

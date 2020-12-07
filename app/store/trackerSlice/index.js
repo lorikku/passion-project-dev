@@ -19,11 +19,14 @@ export const trackerSlice = createSlice({
     addTrackerData: (state, action) => {
       state.data.push(action.payload);
     },
+    purgeTrackerData: (state) => {
+      state.data = [];
+    }
   },
 });
 
 //Export reducer functions to use it in dispatch in components
-export const { toggleTracker, addTrackerData } = trackerSlice.actions;
+export const { toggleTracker, addTrackerData, purgeTrackerData } = trackerSlice.actions;
 
 //Select tracker query to read data from tracker state
 export const selectTracker = (store) => store.tracker;

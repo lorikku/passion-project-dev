@@ -3,7 +3,7 @@ import { Alert } from 'react-native';
 import * as Brightness from 'expo-brightness';
 
 import { useDispatch } from 'react-redux';
-import { toggleTracker } from '../../store/trackerSlice';
+import { purgeTrackerData, toggleTracker } from '../../store/trackerSlice';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import SleepIcon from '../svg/elements/SleepIcon';
 
@@ -28,6 +28,7 @@ export default SleepButton = ({ active }) => {
                 }
               });
               dispatch(toggleTracker());
+              dispatch(purgeTrackerData())
             },
           },
         ],
