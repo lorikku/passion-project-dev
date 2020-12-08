@@ -1,22 +1,15 @@
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { useSelector } from 'react-redux';
-import DiaryList from '../../components/diary/DiaryList';
-import EmptyList from '../../components/general/EmptyList';
-import { selectDiary } from '../../store/diarySlice';
 import globalStyles from '../../styles';
 
-export default RealityCheck = ({ navigation }) => {
-  const diary = useSelector(selectDiary); 
+export default DiaryDetail = ({ navigation, route }) => {
+  const navigateBack = () => navigation.goBack();
+
   return (
     <View style={styles.container}>
       <Text style={styles.subtitle}>Diary</Text>
       <View style={styles.contentWrapper}>
-        {diary.length === 0 || diary.findIndex(entry => entry.availible === true) === -1 ? (
-          <EmptyList diary={true} navigation={navigation} />
-        ) : (
-          <DiaryList data={diary} />
-        )}
+        <Text>Test ddetail page</Text>
       </View>
     </View>
   );
@@ -38,6 +31,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: globalStyles.color.darkBackground,
     width: '100%',
-    paddingVertical: 25,
-  }
+    padding: 25,
+  },
 });

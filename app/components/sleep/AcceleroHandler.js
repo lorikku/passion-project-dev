@@ -47,6 +47,9 @@ export default AcceleroHandler = ({
         if (!start) {
           //The "start" variable gets set to current date, so does "nextAt". The "start" variable is here only for debugging purposes, this could be perfectly be achieved using the "nextAt" variable only
           start = new Date().getTime();
+          //If new tracker instance started => set "calculatedAcceleroInterval" back to standard interval
+          setCalculatedAcceleroInterval(acceleroInterval);
+          //If new tracker instance started => set "nextAnalyse"
           setNextAnalyse(generateFutureTime(analyseInterval));
           nextAt = start;
         }
@@ -75,12 +78,12 @@ export default AcceleroHandler = ({
       //interval.remove() gets returned in a cleanup function for React's useEffect. This prevents multiple listeners from stacking
       return () => interval.remove();
     } else {
-      //If tracker is not active, set timer (back) to 0
-      setTimer(0);
+      //If another analyse was planned, but activeTracker is undefined => tracking got probably cancelled => run one more last analyse
+      nextAnalyse && analyseData(); setNextAnalyse(undefined);
       //If tracker is not active, set "start" (back) to 0
       start = undefined;
-      //If tracker is not active, set "calculatedAcceleroInterval" back to standard interval
-      setCalculatedAcceleroInterval(acceleroInterval);
+      //If tracker is not active, set timer (back) to 0
+      setTimer(0);
       //If tracker is not active, set "noDeviation" back to 0
       setNoDeviation(0);
     }

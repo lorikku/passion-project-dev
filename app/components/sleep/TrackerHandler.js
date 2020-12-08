@@ -2,8 +2,9 @@ import * as React from 'react';
 import { StyleSheet, Text } from 'react-native';
 import { Audio } from 'expo-av';
 
-import { useDispatch } from 'react-redux';
-import { purgeTrackerData } from '../../store/trackerSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { purgeTrackerData, selectTracker } from '../../store/trackerSlice';
+import { addAnalysisDataToEntry } from '../../store/diarySlice';
 
 import { deviation as calcDeviation } from 'd3';
 
@@ -23,6 +24,7 @@ const {
 export default TrackerHandler = ({ active }) => {
   //Redux hooks
   const dispatch = useDispatch();
+  const tracker = useSelector(selectTracker);
 
   //Accelerometer data pushing and timer handler states
   const [timer, setTimer] = React.useState(0);
@@ -34,8 +36,8 @@ export default TrackerHandler = ({ active }) => {
 
   //Analyse data function
   const analyseData = () => {
-    ///1. Copy to-be-purged" aka current state to "data"
-    const data = trackerData.data;
+    ///1. Copy "to-be-purged" aka current acceleroData to "data"
+    const data = tracker.acceleroData;
 
     ///2. Purge the current state
     dispatch(purgeTrackerData());
@@ -44,15 +46,27 @@ export default TrackerHandler = ({ active }) => {
     //Filter all data values from data array
     const filteredData = data.map((obj) => obj.data);
 
-    //If movement deviation has been deteceted in the last amount of "analyseInterval", change state
-    const deviation = calcDeviation(filteredData);
-    if (deviation < movementThreshold) {
-      setNoDeviation((prevState) => prevState + 1);
-    } else {
-      setNoDeviation(0);
-      console.log('movement detected :(', deviation);
-    }
+    //If movement deviation has been deteceted in the last amount of "analyseInterval", increment state
+    const analysisTimestamp = data[data.length - 1].elapsedTime;
+    const analysisDeviation = calcDeviation(filteredData);
 
+    if (analysisDeviation) {
+      if (analysisDeviation < movementThreshold) {
+        setNoDeviation((prevState) => prevState + 1);
+      } else {
+        setNoDeviation(0);
+        console.log('movement detected :(', analysisDeviation);
+      }
+
+      //Add analysis data to diary entry for generating graph later on
+      dispatch(
+        addAnalysisDataToEntry({
+          trackerName: tracker.activeTracker,
+          timestamp: analysisTimestamp,
+          analysisData: analysisDeviation,
+        })
+      );
+    }
     //Set next interval for analysing
     setNextAnalyse(generateFutureTime(analyseInterval));
   };
@@ -85,14 +99,14 @@ export default TrackerHandler = ({ active }) => {
           require('../../assets/audio/sample.mp3'),
           { shouldPlay: false }
         );
-        setPlaybackObject(() => res.sound);
+        setPlaybackObject(res.sound);
       };
       fetchAudioAsync();
-    } else {
-      playbackObject.loadAsync();
     }
 
-    return () => playbackObject.unloadAsync();
+    return () =>
+      playbackObject &&
+      playbackObject.unloadAsync().then(setPlaybackObject(undefined));
   }, []);
 
   //Timer component and accelerohandler which returns nothing

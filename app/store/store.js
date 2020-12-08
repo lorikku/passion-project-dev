@@ -4,10 +4,10 @@ import { persistReducer, persistStore } from 'redux-persist';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// import logger from 'redux-logger';
+//import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 
-import checkerReducer from './checkerReducer';
+import checkerReducer from './checkerSlice';
 import trackerReducer from './trackerSlice';
 import uiReducer from './uiSlice';
 import diaryReducer from './diarySlice';
@@ -22,7 +22,7 @@ const reducers = combineReducers({
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  blacklist: ['tracker'],
+  blacklist: ['tracker', 'diary'],
 };
 
 const persistedReducers = persistReducer(persistConfig, reducers);

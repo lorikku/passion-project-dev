@@ -7,27 +7,24 @@ import {
 } from 'react-native-gesture-handler';
 
 import { useDispatch } from 'react-redux';
-import {
-  deleteRealityCheckAsync,
-  toggleRealityCheckAsync,
-} from '../../store/checkerSlice';
+import { deleteDiaryEntry } from '../../store/diarySlice/index';
 
 import globalStyles from '../../styles';
 
-export default CheckerList = ({ data }) => {
+export default DiaryList = ({ data }) => {
   const dispatch = useDispatch();
 
-  const handleDeletion = (check) => {
+  const handleDeletion = (entry) => {
     Alert.alert(
-      'Delete Check?',
-      'Are you sure you want to delete this Reality Check?',
+      'Delete Diary Entry?',
+      'Are you sure you want to delete this diary entry?',
       [
         {
           text: 'No',
         },
         {
           text: 'Yes',
-          onPress: () => dispatch(deleteRealityCheckAsync(check)),
+          onPress: () => dispatch(deleteDiaryEntry(entry.trackerName)),
         },
       ],
       { cancelable: false }
@@ -36,19 +33,18 @@ export default CheckerList = ({ data }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.listContainer}>
-      {data.map((check) => (
+      {data.map((entry) => (
         <TouchableOpacity
-          key={check.id}
-          onLongPress={() => handleDeletion(check)}
+          key={entry.trackerName}
+          onLongPress={() => handleDeletion(entry)}
         >
           <View style={styles.container}>
             <View>
-              <Text style={styles.headerText}>{check.content.body}</Text>
-              <Text style={styles.bodyText}>{`${check.freq} frequency`}</Text>
+              <Text style={styles.bodyText}>{entry.trackerName}</Text>
             </View>
             <Switch
-              value={check.active}
-              onValueChange={() => dispatch(toggleRealityCheckAsync(check))}
+              value={true}
+              onValueChange={() => console.log('this does nothing XD')}
             />
           </View>
         </TouchableOpacity>
@@ -80,6 +76,5 @@ const styles = StyleSheet.create({
     ...globalStyles.text.default,
     color: globalStyles.color.gray,
     fontSize: 14,
-    textTransform: 'capitalize',
   },
 });

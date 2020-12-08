@@ -15,14 +15,6 @@ currently scheduled notifications to store */
 export const checkerSlice = createSlice({
   name: 'checker',
   initialState,
-  reducers: {
-    deleteCheckerById: (state, action) => {
-      const index = state.findIndex((_, index) => index === action.payload);
-      if (index !== -1) {
-        state.splice(index, index + 1);
-      }
-    },
-  },
   extraReducers: {
     [addRealityCheckThunk.fulfilled]: (state, action) => {
       state.push(action.payload);

@@ -9,7 +9,7 @@ import globalStyles from '../../styles';
 
 import AddIcon from '../../components/svg/elements/AddIcon';
 import CheckerList from '../../components/reality-check/CheckerList';
-import CheckerEmpty from '../../components/reality-check/CheckerEmpty';
+import EmptyList from '../../components/general/EmptyList';
 import {
   getPermissionsAsync,
   requestPermissionsAsync,
@@ -35,7 +35,7 @@ export default RealityCheck = ({ navigation }) => {
       <Text style={styles.subtitle}>Reality Checks</Text>
       <View style={styles.contentWrapper}>
         {checker.length === 0 ? (
-          <CheckerEmpty />
+          <EmptyList />
         ) : (
           <CheckerList data={checker} />
         )}
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: globalStyles.color.darkBackground,
     width: '100%',
-    padding: 25,
+    paddingVertical: 25,
     justifyContent: 'space-between',
   },
   addButton: {
