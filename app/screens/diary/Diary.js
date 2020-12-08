@@ -15,10 +15,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: globalStyles.color.background,
     ...globalStyles.spacer.safePadding,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   subtitle: {
     ...globalStyles.text.subTitle,
     color: globalStyles.color.white,
-  }
+  },
 });

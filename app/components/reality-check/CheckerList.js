@@ -1,25 +1,55 @@
 import * as React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {ScrollView, Switch} from 'react-native-gesture-handler';
-import {useDispatch} from 'react-redux';
-import {toggleRealityCheck} from '../../store/checkerSlice';
+import { Alert, Dimensions, StyleSheet, Text, View } from 'react-native';
+import {
+  ScrollView,
+  Switch,
+  TouchableOpacity,
+} from 'react-native-gesture-handler';
+import { useDispatch } from 'react-redux';
+import {
+  deleteRealityCheckAsync,
+  toggleRealityCheckAsync,
+} from '../../store/checkerSlice';
 import globalStyles from '../../styles';
 
-export default CheckerList = ({navigation, data}) => {
+export default CheckerList = ({ data }) => {
   const dispatch = useDispatch();
+
+  const handleDeletion = (check) => {
+    Alert.alert(
+      'Delete Check?',
+      'Are you sure you want to delete this Reality Check?',
+      [
+        {
+          text: 'No',
+        },
+        {
+          text: 'Yes',
+          onPress: () => dispatch(deleteRealityCheckAsync(check)),
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.listContainer}>
       {data.map((check) => (
-        <View key={check.id} style={styles.container}>
-          <View>
-            <Text style={styles.headerText}>{check.content.body}</Text>
-            <Text style={styles.bodyText}>{`${check.freq} frequency`}</Text>
+        <TouchableOpacity
+          key={check.id}
+          onLongPress={() => handleDeletion(check)}
+        >
+          <View style={styles.container}>
+            <View>
+              <Text style={styles.headerText}>{check.content.body}</Text>
+              <Text style={styles.bodyText}>{`${check.freq} frequency`}</Text>
+            </View>
+            <Switch
+              value={check.active}
+              onValueChange={() => dispatch(toggleRealityCheckAsync(check))}
+            />
           </View>
-          <Switch 
-          value={check.active}
-          onValueChange={() => dispatch(toggleRealityCheck(check))}
-          />
-        </View>
+        </TouchableOpacity>
       ))}
     </ScrollView>
   );
@@ -32,7 +62,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    width: '100%',
+    width: Dimensions.get('window').width - 50,
 
     marginBottom: 15,
     borderRadius: 30,
@@ -48,6 +78,6 @@ const styles = StyleSheet.create({
     ...globalStyles.text.default,
     color: globalStyles.color.gray,
     fontSize: 14,
-    textTransform: 'capitalize'
+    textTransform: 'capitalize',
   },
 });

@@ -2,10 +2,10 @@ import * as React from 'react';
 import { StyleSheet, Text } from 'react-native';
 import { Audio } from 'expo-av';
 
-import { useDispatch, useSelector } from 'react-redux';
-import { purgeTrackerData, selectTracker } from '../../store/trackerSlice';
+import { useDispatch } from 'react-redux';
+import { purgeTrackerData } from '../../store/trackerSlice';
 
-import * as d3 from 'd3';
+import { deviation as calcDeviation } from 'd3';
 
 import globalStyles from '../../styles';
 import trackerTools from './trackerTools';
@@ -14,6 +14,7 @@ import AcceleroHandler from './AcceleroHandler';
 //Getting parameters and usable functions for analysing data
 const {
   analyseInterval,
+  movementThreshold,
   formatTime,
   generateFutureTime,
 } = trackerTools;
@@ -22,29 +23,34 @@ const {
 export default TrackerHandler = ({ active }) => {
   //Redux hooks
   const dispatch = useDispatch();
-  const trackerData = useSelector(selectTracker)
 
   //Accelerometer data pushing and timer handler states
   const [timer, setTimer] = React.useState(0);
 
   //Real-time analysis states
-  const [nextAnalyse, setNextAnalyse] = React.useState();
+  const [playbackObject, setPlaybackObject] = React.useState(undefined);
+  const [nextAnalyse, setNextAnalyse] = React.useState(undefined);
   const [noDeviation, setNoDeviation] = React.useState(0);
-  const [playbackObject, setPlaybackObject] = React.useState();
 
+  //Analyse data function
   const analyseData = () => {
-    //Copy to-be-purged" aka current state to "data"
+    ///1. Copy to-be-purged" aka current state to "data"
     const data = trackerData.data;
-    //Purge the current state
+
+    ///2. Purge the current state
     dispatch(purgeTrackerData());
 
-    //Analyse the copied state
-    const filteredData = data.map(obj => obj.data);
+    ///3. Analyse the copied state
+    //Filter all data values from data array
+    const filteredData = data.map((obj) => obj.data);
 
-    if(d3.deviation(filteredData) < 0.0009) {
-      setNoDeviation(prevState => prevState + 1);
+    //If movement deviation has been deteceted in the last amount of "analyseInterval", change state
+    const deviation = calcDeviation(filteredData);
+    if (deviation < movementThreshold) {
+      setNoDeviation((prevState) => prevState + 1);
     } else {
-      console.log('deviation :(', d3.deviation(filteredData))
+      setNoDeviation(0);
+      console.log('movement detected :(', deviation);
     }
 
     //Set next interval for analysing
@@ -53,33 +59,57 @@ export default TrackerHandler = ({ active }) => {
 
   //Handler on 'noDeviation' change
   React.useEffect(() => {
-    console.log('no deviation :o', '#' + noDeviation);
+    switch (noDeviation) {
+      case 0:
+        break;
 
-    if(noDeviation === 3) {
-      playbackObject.playAsync();
+      case 3: //Amount of "noDeviations" required before assuming user is asleep
+        console.log(
+          'PERSON IS DEFINETELY PARALYZED -> REM PHASE! #' + noDeviation
+        );
+        playbackObject.playFromPositionAsync(0);
+        setNoDeviation(0);
+        break;
+
+      default:
+        console.log('no, if barely any movement detected :o #' + noDeviation);
+        break;
     }
-
-  }, [noDeviation])
+  }, [noDeviation]);
 
   //Loading audio object
   React.useEffect(() => {
-    const fetchAudioAsync = async () => {
-      const res = await Audio.Sound.createAsync(
-        { uri: 'https://freesound.org/data/previews/547/547162_1973065-lq.ogg'},
-        { shouldPlay: false }
-      );
-      setPlaybackObject(() => res.sound);
+    if (!playbackObject) {
+      const fetchAudioAsync = async () => {
+        const res = await Audio.Sound.createAsync(
+          require('../../assets/audio/sample.mp3'),
+          { shouldPlay: false }
+        );
+        setPlaybackObject(() => res.sound);
+      };
+      fetchAudioAsync();
+    } else {
+      playbackObject.loadAsync();
     }
-    fetchAudioAsync();
-  }, []);
-  
 
+    return () => playbackObject.unloadAsync();
+  }, []);
+
+  //Timer component and accelerohandler which returns nothing
   return (
     <>
       <Text style={[styles.timer, { opacity: active ? 1 : 0.4 }]}>
         {active ? formatTime(timer) : '--:--:--'}
       </Text>
-      <AcceleroHandler active={active} timer={timer} setTimer={setTimer} nextAnalyse={nextAnalyse} setNextAnalyse={setNextAnalyse} analyseData={analyseData}/>
+      <AcceleroHandler
+        active={active}
+        timer={timer}
+        setTimer={setTimer}
+        nextAnalyse={nextAnalyse}
+        setNextAnalyse={setNextAnalyse}
+        analyseData={analyseData}
+        setNoDeviation={setNoDeviation}
+      />
     </>
   );
 };

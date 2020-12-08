@@ -7,14 +7,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 
-import checkerSlice from './checkerSlice';
+import checkerReducer from './checkerReducer';
 import trackerReducer from './trackerSlice';
 import uiReducer from './uiSlice';
+import diaryReducer from './diarySlice';
 
 const reducers = combineReducers({
   ui: uiReducer,
-  checker: checkerSlice,
+  checker: checkerReducer,
   tracker: trackerReducer,
+  diary: diaryReducer,
 });
 
 const persistConfig = {

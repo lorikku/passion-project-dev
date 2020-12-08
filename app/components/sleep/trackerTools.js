@@ -2,7 +2,12 @@ const trackerTools = {
   //Interval for fetching accelerometer data (in ms)
   acceleroInterval: 500,
   //Interval for analysing data (in ms)
-  analyseInterval: 5/* s */ * 1000/* ms */ /* equals to 10 seconds */,
+  analyseInterval: 4 /* s */ * 1000 /* ms */ /* equals to 10 seconds */,
+
+  //Analysis movement detection threshold
+  movementThreshold: 0.0011, //threshold good enough, accepts even heavy breathing but not the slightest movement
+  //movementThreshold: 0.00099, -> threshold too narrow, detects breathing too
+
   //Formatting time
   formatTime: (time) => {
     const timeSec = time / 1000;

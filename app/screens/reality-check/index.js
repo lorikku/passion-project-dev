@@ -18,7 +18,7 @@ export default () => {
           animationEnabled: false,
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="RealityCheckInput"
         component={RealityCheckInput}
         options={{

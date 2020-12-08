@@ -11,7 +11,6 @@ import { useDispatch } from 'react-redux';
 import { disableFirstTime } from '../../store/uiSlice';
 
 export default Intro = ({ navigation, props }) => {
-
   const dispatch = useDispatch();
   const onStartPress = () => {
     Alert.alert(
@@ -61,8 +60,8 @@ const styles = StyleSheet.create({
   text: {
     ...globalStyles.text.default,
     color: globalStyles.color.white,
-    marginRight: 10, 
-    fontSize: 22 
+    marginRight: 10,
+    fontSize: 22,
   },
   button: {
     flexDirection: 'row',

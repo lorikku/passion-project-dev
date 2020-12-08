@@ -1,29 +1,36 @@
 import * as React from 'react';
 import { Accelerometer } from 'expo-sensors';
 
-import {useDispatch} from 'react-redux';
-import { addTrackerData } from '../../store/trackerSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { addTrackerData, selectTracker } from '../../store/trackerSlice';
 import trackerTools from './trackerTools';
 
-
-//Getting parameters and usable functions for ACCELEROMETER loop
-const {
-  analyseInterval,
-  acceleroInterval,
-  generateFutureTime,
-} = trackerTools;
-//Variables for Accelerometer listener
+//Getting parameters and usable functions for accelerometer loop
+const { analyseInterval, acceleroInterval, generateFutureTime } = trackerTools;
+//Variables for accelerometer listener
 let start;
 let nextAt;
 
 //COMPONENT
-export default AcceleroHandler = ({ active, timer, setTimer, nextAnalyse, setNextAnalyse, analyseData}) => {
+export default AcceleroHandler = ({
+  active,
+  timer,
+  setTimer,
+  nextAnalyse,
+  setNextAnalyse,
+  analyseData,
+  setNoDeviation,
+}) => {
   //Redux hooks
   const dispatch = useDispatch();
+  const data = useSelector(selectTracker);
 
   //Accelerometer data pushing and timer handler states
-  const [calculatedAcceleroInterval, setCalculatedAcceleroInterval] = React.useState(acceleroInterval);
-  
+  const [
+    calculatedAcceleroInterval,
+    setCalculatedAcceleroInterval,
+  ] = React.useState(acceleroInterval);
+
   /* --- ACCELEROMETER --- */
   //Using react native's effect hook for ACCELEROMETER
   React.useEffect(() => {
@@ -51,7 +58,7 @@ export default AcceleroHandler = ({ active, timer, setTimer, nextAnalyse, setNex
         // console.log(drift);
 
         //The "timer" variable gets increased by the calculated acceleroInterval (compensating for the drift) (in milliseconds)
-        setTimer(prevState => prevState + calculatedAcceleroInterval);
+        setTimer((prevState) => prevState + calculatedAcceleroInterval);
         dispatch(
           addTrackerData({
             data: accelerometerData.x,
@@ -60,7 +67,7 @@ export default AcceleroHandler = ({ active, timer, setTimer, nextAnalyse, setNex
         );
 
         //Analyse data for every interval
-        (new Date().getTime() > nextAnalyse) && analyseData();
+        new Date().getTime() > nextAnalyse && analyseData();
 
         //The "calculatedAcceleroInterval" state gets changed to the difference between the 'expected' NEXT time listener will run (nextAt) AND the current time, which eleminates the drift
         setCalculatedAcceleroInterval(nextAt - new Date().getTime());
@@ -74,6 +81,8 @@ export default AcceleroHandler = ({ active, timer, setTimer, nextAnalyse, setNex
       start = undefined;
       //If tracker is not active, set "calculatedAcceleroInterval" back to standard interval
       setCalculatedAcceleroInterval(acceleroInterval);
+      //If tracker is not active, set "noDeviation" back to 0
+      setNoDeviation(0);
     }
   }, [active, calculatedAcceleroInterval]);
 

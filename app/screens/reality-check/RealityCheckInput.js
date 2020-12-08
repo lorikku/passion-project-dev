@@ -1,21 +1,21 @@
 import * as React from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
-import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
-import {useDispatch} from 'react-redux';
+import { Platform, StyleSheet, Text, View } from 'react-native';
+import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
+import { useDispatch } from 'react-redux';
 import BackIcon from '../../components/svg/elements/BackIcon';
-import {addRealityCheck} from '../../store/checkerSlice';
+import { addRealityCheckAsync } from '../../store/checkerSlice';
 import globalStyles from '../../styles';
-import {Picker} from '@react-native-community/picker';
+import { Picker } from '@react-native-community/picker';
 
-export default RealityCheckInput = ({navigation}) => {
+export default RealityCheckInput = ({ navigation }) => {
   const [body, setBody] = React.useState('');
   const [freq, setFreq] = React.useState('low');
   const dispatch = useDispatch();
 
   const onAddRealityCheck = () => {
-    if(body !== ''){
+    if (body !== '') {
       dispatch(
-        addRealityCheck({
+        addRealityCheckAsync({
           body,
           freq,
         })
@@ -24,7 +24,7 @@ export default RealityCheckInput = ({navigation}) => {
       setFreq('');
       navigateBack();
     }
-  }
+  };
 
   const navigateBack = () => navigation.goBack();
 
@@ -41,9 +41,9 @@ export default RealityCheckInput = ({navigation}) => {
       </View>
       <View style={styles.contentWrapper}>
         <Text />
-        <View style={{alignItems: 'center'}}>
-        <View>
-          <Text style={styles.labelText}>Write your reality check</Text>
+        <View style={{ alignItems: 'center' }}>
+          <View>
+            <Text style={styles.labelText}>Write your reality check</Text>
             <TextInput
               style={styles.inputText}
               placeholder={'Count your fingers '}
@@ -51,8 +51,8 @@ export default RealityCheckInput = ({navigation}) => {
               value={body}
               onChangeText={(text) => setBody(text)}
             />
-        </View>
-          <View >
+          </View>
+          <View>
             <Text style={styles.labelText}>Select frequency</Text>
             <View style={styles.pickerWrapper}>
               <Picker
@@ -90,17 +90,17 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    width: '100%'
+    width: '100%',
   },
   subtitle: {
     ...globalStyles.text.subTitle,
     color: globalStyles.color.white,
-    textAlign: "center",
-    paddingBottom: 10
+    textAlign: 'center',
+    paddingBottom: 10,
   },
   backButton: {
     marginTop: 20,
-    marginLeft: 20
+    marginLeft: 20,
   },
   contentWrapper: {
     flex: 1,
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderBottomColor: globalStyles.color.white,
     borderBottomWidth: 2,
-    minWidth: 200
+    minWidth: 200,
   },
   labelText: {
     ...globalStyles.text.default,
@@ -130,19 +130,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginLeft: Platform.OS === 'android' ? -7 : 0,
     marginTop: Platform.OS === 'android' ? -20 : 0,
-    minWidth: 200
+    minWidth: 200,
   },
   inputPicker: {
     height: 100,
     width: 200,
     color: globalStyles.color.white,
-    fontSize: 20
+    fontSize: 20,
   },
   pickerDropdown: {
     color: globalStyles.color.white,
     ...globalStyles.text.compact,
     fontWeight: 'bold',
-    fontSize: 18
+    fontSize: 18,
   },
   addButton: {
     backgroundColor: globalStyles.color.lightblue,
@@ -152,12 +152,12 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     borderRadius: 30,
     paddingHorizontal: 30,
-    paddingVertical: 20
+    paddingVertical: 20,
   },
-  addButtonText:{
+  addButtonText: {
     color: globalStyles.color.background,
     ...globalStyles.text.compact,
     fontSize: 18,
-    fontWeight: 'bold'
-  }
+    fontWeight: 'bold',
+  },
 });

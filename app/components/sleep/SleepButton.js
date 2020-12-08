@@ -28,7 +28,7 @@ export default SleepButton = ({ active }) => {
                 }
               });
               dispatch(toggleTracker());
-              dispatch(purgeTrackerData())
+              dispatch(purgeTrackerData());
             },
           },
         ],
@@ -39,8 +39,8 @@ export default SleepButton = ({ active }) => {
         if (status === 'granted') {
           Brightness.setBrightnessAsync(0);
         }
+        dispatch(toggleTracker());
       });
-      dispatch(toggleTracker());
     }
   };
 

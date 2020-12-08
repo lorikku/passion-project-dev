@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
-
+import trackerToolsRedux from '../trackerToolsRedux';
 
 //Initial state is an empty array which will contain objects with accelerometer data
 const initialState = {
-  activeTracker: false,
+  activeTracker: undefined,
   data: [],
 };
 
@@ -14,19 +14,28 @@ export const trackerSlice = createSlice({
   initialState,
   reducers: {
     toggleTracker: (state) => {
-      state.activeTracker = !state.activeTracker;
+      if (state.activeTracker) {
+        state.activeTracker = undefined;
+      } else {
+        state.activeTracker = trackerToolsRedux.generateFileName();
+        console.log(state.activeTracker);
+      }
     },
     addTrackerData: (state, action) => {
       state.data.push(action.payload);
     },
     purgeTrackerData: (state) => {
       state.data = [];
-    }
+    },
   },
 });
 
 //Export reducer functions to use it in dispatch in components
-export const { toggleTracker, addTrackerData, purgeTrackerData } = trackerSlice.actions;
+export const {
+  toggleTracker,
+  addTrackerData,
+  purgeTrackerData,
+} = trackerSlice.actions;
 
 //Select tracker query to read data from tracker state
 export const selectTracker = (store) => store.tracker;
