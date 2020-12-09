@@ -4,7 +4,7 @@ import { Audio } from 'expo-av';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { purgeTrackerData, selectTracker } from '../../store/trackerSlice';
-import { addAnalysisDataToEntry } from '../../store/diarySlice';
+import { addAnalysisDataToEntry, reportRemToEntry } from '../../store/diarySlice';
 
 import { deviation as calcDeviation } from 'd3';
 
@@ -37,17 +37,17 @@ export default TrackerHandler = ({ active }) => {
   //Analyse data function
   const analyseData = () => {
     ///1. Copy "to-be-purged" aka current acceleroData to "data"
-    const data = tracker.acceleroData;
+    const trackerData = tracker.acceleroData;
 
     ///2. Purge the current state
     dispatch(purgeTrackerData());
 
     ///3. Analyse the copied state
     //Filter all data values from data array
-    const filteredData = data.map((obj) => obj.data);
+    const filteredData = trackerData.map((obj) => obj.data);
 
     //If movement deviation has been deteceted in the last amount of "analyseInterval", increment state
-    const analysisTimestamp = data[data.length - 1].elapsedTime;
+    const analysisElapsedTime = trackerData[trackerData.length - 1].elapsedTime;
     const analysisDeviation = calcDeviation(filteredData);
 
     if (analysisDeviation) {
@@ -62,8 +62,8 @@ export default TrackerHandler = ({ active }) => {
       dispatch(
         addAnalysisDataToEntry({
           trackerName: tracker.activeTracker,
-          timestamp: analysisTimestamp,
-          analysisData: analysisDeviation,
+          elapsedTime: analysisElapsedTime,
+          deviation: analysisDeviation,
         })
       );
     }
@@ -83,6 +83,7 @@ export default TrackerHandler = ({ active }) => {
         );
         playbackObject.playFromPositionAsync(0);
         setNoDeviation(0);
+        dispatch(reportRemToEntry(tracker.activeTracker));
         break;
 
       default:

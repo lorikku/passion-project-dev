@@ -59,7 +59,6 @@ const styles = StyleSheet.create({
   subtitle: {
     ...globalStyles.text.subTitle,
     color: globalStyles.color.white,
-    paddingBottom: 10,
   },
   contentWrapper: {
     flex: 1,

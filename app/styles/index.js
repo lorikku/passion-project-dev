@@ -12,12 +12,12 @@ const globalStyles = {
   },
   text: {
     title: { fontFamily: 'sfProRoundedBold', fontSize: 80 },
-    subTitle: { fontFamily: 'sfProRoundedBold', fontSize: 40, paddingTop: 30 },
+    subTitle: { fontFamily: 'sfProRoundedBold', fontSize: 40, paddingBottom: Platform.OS === 'ios' ? 10 :  0},
     compact: { fontFamily: 'sfProCompactRegular' },
     default: { fontFamily: 'sfProRoundedRegular' },
   },
   spacer: {
-    safePadding: { paddingTop: Platform.OS === 'android' ? 28 : 40 },
+    safePadding: { paddingTop: Platform.OS === 'android' ? 40 : 65 },
   },
 };
 

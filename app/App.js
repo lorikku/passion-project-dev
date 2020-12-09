@@ -77,7 +77,7 @@ export default function App(props) {
           </View>
           <KeyboardAvoidingView
             style={styles.container}
-            behavior={Platform.Os == 'ios' ? 'padding' : 'height'}
+            behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
           >
             <NavigationContainer
               ref={containerRef}

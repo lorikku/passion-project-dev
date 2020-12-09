@@ -15,7 +15,7 @@ export default RealityCheck = ({ navigation }) => {
         {diary.length === 0 || diary.findIndex(entry => entry.availible === true) === -1 ? (
           <EmptyList diary={true} navigation={navigation} />
         ) : (
-          <DiaryList data={diary} />
+          <DiaryList data={diary} navigation={navigation} />
         )}
       </View>
     </View>
@@ -32,7 +32,6 @@ const styles = StyleSheet.create({
   subtitle: {
     ...globalStyles.text.subTitle,
     color: globalStyles.color.white,
-    paddingBottom: 10,
   },
   contentWrapper: {
     flex: 1,

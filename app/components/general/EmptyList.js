@@ -13,7 +13,7 @@ export default EmptyList = ({ navigation, diary }) => {
             You currently have no diary entries.
           </Text>
           <Text style={styles.bodyText}>
-            A diary entry will automatically be generated whenever you{' '}
+            A diary entry will automatically be generated whenever you {' '}
             <Text
               onPress={navigateToSleep}
               style={{ textDecorationLine: 'underline', fontWeight: 'bold' }}

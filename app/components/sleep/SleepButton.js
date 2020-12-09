@@ -3,7 +3,7 @@ import { Alert } from 'react-native';
 import * as Brightness from 'expo-brightness';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { addDiaryEntry, makeDiaryAvailible } from '../../store/diarySlice';
+import { addDiaryEntry, makeEntryAvailible } from '../../store/diarySlice';
 import { selectTracker, toggleTracker } from '../../store/trackerSlice';
 import trackerTools from './trackerTools';
 
@@ -30,7 +30,7 @@ export default SleepButton = ({ active }) => {
               //Set brightness back to system brightness
               Brightness.getPermissionsAsync().then(({ status }) => status === 'granted' && Brightness.useSystemBrightnessAsync());
               //Disable tracker
-              dispatch(makeDiaryAvailible(tracker.activeTracker));
+              dispatch(makeEntryAvailible(tracker.activeTracker));
               dispatch(toggleTracker(undefined));
             },
           },

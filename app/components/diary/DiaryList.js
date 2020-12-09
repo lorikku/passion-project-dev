@@ -1,3 +1,4 @@
+import { color } from 'd3';
 import * as React from 'react';
 import { Alert, Dimensions, StyleSheet, Text, View } from 'react-native';
 import {
@@ -11,10 +12,16 @@ import { deleteDiaryEntry } from '../../store/diarySlice/index';
 
 import globalStyles from '../../styles';
 
-export default DiaryList = ({ data }) => {
+export default DiaryList = ({ navigation, data }) => {
   const dispatch = useDispatch();
 
-  const handleDeletion = (entry) => {
+  const navigateToDetail = (trackerName) => {
+    navigation.navigate('DiaryDetail', {
+      trackerName,
+    });
+  };
+
+  const handleDeletion = (trackerName) => {
     Alert.alert(
       'Delete Diary Entry?',
       'Are you sure you want to delete this diary entry?',
@@ -24,7 +31,7 @@ export default DiaryList = ({ data }) => {
         },
         {
           text: 'Yes',
-          onPress: () => dispatch(deleteDiaryEntry(entry.trackerName)),
+          onPress: () => dispatch(deleteDiaryEntry(trackerName)),
         },
       ],
       { cancelable: false }
@@ -33,22 +40,38 @@ export default DiaryList = ({ data }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.listContainer}>
-      {data.map((entry) => (
-        <TouchableOpacity
-          key={entry.trackerName}
-          onLongPress={() => handleDeletion(entry)}
-        >
-          <View style={styles.container}>
-            <View>
-              <Text style={styles.bodyText}>{entry.trackerName}</Text>
+      {data.map((entry) => {
+        const date = new Date(parseInt(entry.trackerName.split('_')[1]));
+        return (
+          <TouchableOpacity
+            key={entry.trackerName}
+            onPress={() => navigateToDetail(entry.trackerName)}
+            onLongPress={() => handleDeletion(entry.trackerName)}
+          >
+            <View style={styles.container}>
+              <View>
+                <Text
+                  style={styles.headerText}
+                >{`${date.toLocaleDateString()} • ${date.toLocaleTimeString()}`}</Text>
+                <Text
+                  style={[
+                    styles.bodyText,
+                    !entry.audioUri && { color: 'gray' },
+                  ]}
+                >
+                  {entry.audioUri
+                    ? 'Audio recording availible'
+                    : 'Audio recording unavailible'}
+                </Text>
+              </View>
+              <View style={styles.remWrapper}>
+                <Text style={styles.remAmountText}>{`${entry.remAmount}`}</Text>
+                <Text style={styles.remText}>REM</Text>
+              </View>
             </View>
-            <Switch
-              value={true}
-              onValueChange={() => console.log('this does nothing XD')}
-            />
-          </View>
-        </TouchableOpacity>
-      ))}
+          </TouchableOpacity>
+        );
+      })}
     </ScrollView>
   );
 };
@@ -76,5 +99,19 @@ const styles = StyleSheet.create({
     ...globalStyles.text.default,
     color: globalStyles.color.gray,
     fontSize: 14,
+  },
+  remWrapper: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  remAmountText: {
+    fontFamily: globalStyles.text.title.fontFamily,
+    color: globalStyles.color.white,
+    fontSize: 16,
+    marginBottom: -13,
+  },
+  remText: {
+    ...globalStyles.text.compact,
+    color: globalStyles.color.lightblue,
   },
 });

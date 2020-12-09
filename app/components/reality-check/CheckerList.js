@@ -20,7 +20,7 @@ export default CheckerList = ({ data }) => {
   const handleDeletion = (check) => {
     Alert.alert(
       'Delete Check?',
-      'Are you sure you want to delete this Reality Check?',
+      'Are you sure you want to delete this reality check?',
       [
         {
           text: 'No',

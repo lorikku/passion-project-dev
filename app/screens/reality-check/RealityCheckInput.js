@@ -1,11 +1,13 @@
 import * as React from 'react';
 import { Platform, StyleSheet, Text, View } from 'react-native';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
-import { useDispatch } from 'react-redux';
-import BackIcon from '../../components/svg/elements/BackIcon';
-import { addRealityCheckAsync } from '../../store/checkerSlice';
-import globalStyles from '../../styles';
 import { Picker } from '@react-native-community/picker';
+
+import { useDispatch } from 'react-redux';
+import { addRealityCheckAsync } from '../../store/checkerSlice';
+
+import BackIcon from '../../components/svg/elements/BackIcon';
+import globalStyles from '../../styles';
 
 export default RealityCheckInput = ({ navigation }) => {
   const [body, setBody] = React.useState('');
@@ -95,11 +97,9 @@ const styles = StyleSheet.create({
   subtitle: {
     ...globalStyles.text.subTitle,
     color: globalStyles.color.white,
-    textAlign: 'center',
-    paddingBottom: 10,
+    textAlign: 'center'
   },
   backButton: {
-    marginTop: 20,
     marginLeft: 20,
   },
   contentWrapper: {
