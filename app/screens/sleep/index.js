@@ -1,11 +1,11 @@
 import * as React from 'react';
-
 import { createStackNavigator } from '@react-navigation/stack';
+
+import { useSelector } from 'react-redux';
+import { selectUi } from '../../store/uiSlice';
 
 import Sleep from './Sleep';
 import Intro from './Intro';
-import { useSelector } from 'react-redux';
-import { selectUi } from '../../store/uiSlice';
 
 const Stack = createStackNavigator();
 

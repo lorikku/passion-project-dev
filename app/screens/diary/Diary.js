@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+
 import { useSelector } from 'react-redux';
+import { selectDiary } from '../../store/diarySlice';
+
 import DiaryList from '../../components/diary/DiaryList';
 import EmptyList from '../../components/general/EmptyList';
-import { selectDiary } from '../../store/diarySlice';
 import globalStyles from '../../styles';
 
 export default RealityCheck = ({ navigation }) => {

@@ -3,14 +3,14 @@ import { Alert, StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import * as Brightness from 'expo-brightness';
 
+import { useDispatch } from 'react-redux';
+import { disableFirstTime } from '../../store/uiSlice';
+
 import IntroBg from '../../components/svg/intro/IntroBg';
 import ArrowRight from '../../components/svg/intro/ArrowRight';
 import globalStyles from '../../styles';
 
-import { useDispatch } from 'react-redux';
-import { disableFirstTime } from '../../store/uiSlice';
-
-export default Intro = ({ navigation, props }) => {
+export default Intro = () => {
   const dispatch = useDispatch();
   const onStartPress = () => {
     Alert.alert(

@@ -1,6 +1,10 @@
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import {
+  getPermissionsAsync,
+  requestPermissionsAsync,
+} from 'expo-notifications';
 
 import { useSelector } from 'react-redux';
 import { selectChecker } from '../../store/checkerSlice';
@@ -10,10 +14,6 @@ import globalStyles from '../../styles';
 import AddIcon from '../../components/svg/elements/AddIcon';
 import CheckerList from '../../components/reality-check/CheckerList';
 import EmptyList from '../../components/general/EmptyList';
-import {
-  getPermissionsAsync,
-  requestPermissionsAsync,
-} from 'expo-notifications';
 
 //Requesting notification permissions (for iOS)
 getPermissionsAsync().then(() => {

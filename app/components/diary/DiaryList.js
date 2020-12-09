@@ -1,9 +1,7 @@
-import { color } from 'd3';
 import * as React from 'react';
 import { Alert, Dimensions, StyleSheet, Text, View } from 'react-native';
 import {
   ScrollView,
-  Switch,
   TouchableOpacity,
 } from 'react-native-gesture-handler';
 

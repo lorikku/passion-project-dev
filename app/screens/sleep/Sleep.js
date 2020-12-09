@@ -1,13 +1,14 @@
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import globalStyles from '../../styles';
 
 import { useSelector } from 'react-redux';
 import { selectTracker } from '../../store/trackerSlice';
+
 import SleepButton from '../../components/sleep/SleepButton';
 import TrackerHandler from '../../components/sleep/TrackerHandler';
+import globalStyles from '../../styles';
 
-export default Sleep = ({ navigation, props }) => {
+export default Sleep = () => {
   const tracker = useSelector(selectTracker);
 
   return (

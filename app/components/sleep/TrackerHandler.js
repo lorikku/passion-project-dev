@@ -77,7 +77,7 @@ export default TrackerHandler = ({ active }) => {
       case 0:
         break;
 
-      case 3: //Amount of "noDeviations" required before assuming user is asleep
+      case 5: //Amount of "noDeviations" required before assuming user is in a REM state
         console.log(
           'PERSON IS DEFINETELY PARALYZED -> REM PHASE! #' + noDeviation
         );

@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#001927"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -18,16 +18,14 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "infoPlist": {
         "UIBackgroundModes": ["location", "fetch"]
-      }
+      },
+      "bundleIdentifier": "be.lorikku.lucidy",
+      "buildNumber": "1.0.0"
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      },
       "package": "be.lorikku.lucidy",
       "versionCode": 1,
       "useNextNotificationsApi": true
