@@ -8,7 +8,7 @@ export const diarySlice = createSlice({
   reducers: {
     addDiaryEntry: (state, action) => {
       //"Entry" model structure
-      state.push({
+      state.unshift({
         trackerName: action.payload,
         audioUri: undefined,
         analysisData: [],
@@ -27,7 +27,7 @@ export const diarySlice = createSlice({
         (entry) => entry.trackerName === action.payload
       );
       if (index !== -1) {
-        state.splice(index, index + 1);
+        state.splice(index, 1);
       }
     },
     //Add analysis data to diary entry for generating graph later on

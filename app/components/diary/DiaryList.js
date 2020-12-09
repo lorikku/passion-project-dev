@@ -1,9 +1,6 @@
 import * as React from 'react';
 import { Alert, Dimensions, StyleSheet, Text, View } from 'react-native';
-import {
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native-gesture-handler';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 
 import { useDispatch } from 'react-redux';
 import { deleteDiaryEntry } from '../../store/diarySlice/index';
@@ -40,7 +37,7 @@ export default DiaryList = ({ navigation, data }) => {
     <ScrollView contentContainerStyle={styles.listContainer}>
       {data.map((entry) => {
         const date = new Date(parseInt(entry.trackerName.split('_')[1]));
-        return (
+        return entry.availible ? (
           <TouchableOpacity
             key={entry.trackerName}
             onPress={() => navigateToDetail(entry.trackerName)}
@@ -68,7 +65,7 @@ export default DiaryList = ({ navigation, data }) => {
               </View>
             </View>
           </TouchableOpacity>
-        );
+        ) : null;
       })}
     </ScrollView>
   );

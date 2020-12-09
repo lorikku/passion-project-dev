@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Alert } from 'react-native';
 import * as Brightness from 'expo-brightness';
+import {activateKeepAwake, deactivateKeepAwake} from 'expo-keep-awake';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { addDiaryEntry, makeEntryAvailible } from '../../store/diarySlice';
@@ -29,9 +30,12 @@ export default SleepButton = ({ active }) => {
             onPress: () => {
               //Set brightness back to system brightness
               Brightness.getPermissionsAsync().then(({ status }) => status === 'granted' && Brightness.useSystemBrightnessAsync());
-              //Disable tracker
+              //Make entry availible in diary list
               dispatch(makeEntryAvailible(tracker.activeTracker));
+              //Disable tracker
               dispatch(toggleTracker(undefined));
+              //To let screen sleep
+              deactivateKeepAwake('tracker');
             },
           },
         ],
@@ -43,8 +47,12 @@ export default SleepButton = ({ active }) => {
       Brightness.getPermissionsAsync().then(({ status }) => status === 'granted' && Brightness.setBrightnessAsync(0));
       //Generate a filename and activate tracker
       const fileName = trackerTools.generateFileName();
+      //Activate tracker with filename (used as id)
       dispatch(toggleTracker(fileName));
+      //Add a new entry to the diary with filename (used as id)
       dispatch(addDiaryEntry(fileName));
+      //To keep screen awake
+      activateKeepAwake('tracker');
     }
   };
 

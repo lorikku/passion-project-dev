@@ -20,7 +20,7 @@ export const checkerSlice = createSlice({
       //"Reality check" model structure
       //Looks like useless destructuring, did it to show the model structure
       const { id, content, freq, active } = action.payload;
-      state.push({ id, content, freq, active });
+      state.unshift({ id, content, freq, active });
     },
     [toggleRealityCheckThunk.fulfilled]: (state, action) => {
       const check = state.find((el) => el.id === action.payload);
@@ -31,7 +31,7 @@ export const checkerSlice = createSlice({
     [deleteRealityCheckThunk.fulfilled]: (state, action) => {
       const index = state.findIndex((check) => check.id === action.payload);
       if (index !== -1) {
-        state.splice(index, index + 1);
+        state.splice(index, 1);
       }
     },
   },

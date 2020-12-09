@@ -2,6 +2,7 @@ import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import {
+  cancelAllScheduledNotificationsAsync,
   getPermissionsAsync,
   requestPermissionsAsync,
 } from 'expo-notifications';
@@ -12,6 +13,7 @@ import { selectChecker } from '../../store/checkerSlice';
 import globalStyles from '../../styles';
 
 import AddIcon from '../../components/svg/elements/AddIcon';
+// import BackIcon from '../../components/svg/elements/BackIcon';
 import CheckerList from '../../components/reality-check/CheckerList';
 import EmptyList from '../../components/general/EmptyList';
 
@@ -43,6 +45,9 @@ export default RealityCheck = ({ navigation }) => {
           <TouchableOpacity style={styles.addButton} onPress={navigateToInput}>
             <AddIcon />
           </TouchableOpacity>
+          {/* <TouchableOpacity style={styles.addButton} onPress={cancelAllScheduledNotificationsAsync}>
+            <BackIcon/>
+          </TouchableOpacity> */}
         </View>
       </View>
     </View>

@@ -8,6 +8,8 @@ const trackerTools = {
   movementThreshold: 0.0011, //threshold good enough, accepts even heavy breathing but not the slightest movement
   //movementThreshold: 0.00099, -> threshold too narrow, detects breathing too
 
+  deviationAmount: 5, //Amount of "noDeviations" required before assuming user is in a REM state
+
   //Formatting time
   formatTime: (time) => {
     const timeSec = time / 1000;

@@ -16,6 +16,7 @@ import AcceleroHandler from './AcceleroHandler';
 const {
   analyseInterval,
   movementThreshold,
+  deviationAmount,
   formatTime,
   generateFutureTime,
 } = trackerTools;
@@ -77,7 +78,7 @@ export default TrackerHandler = ({ active }) => {
       case 0:
         break;
 
-      case 5: //Amount of "noDeviations" required before assuming user is in a REM state
+      case deviationAmount: //Amount of "noDeviations" required before assuming user is in a REM state
         console.log(
           'PERSON IS DEFINETELY PARALYZED -> REM PHASE! #' + noDeviation
         );

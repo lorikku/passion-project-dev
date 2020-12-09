@@ -14,7 +14,7 @@ export default function DiaryGraph({ data }) {
           x="elapsedTime"
           y="deviation"
           labels={({ datum }) => datum.rem ? 'REM' : ''}
-          domain={{ y: [0, 0.3] }}
+          domain={{ y: [0, 0.03] }}
           padding={{ left: 70, right: 40, top: 20, bottom: 20 }}
           style={{
             data: {
