@@ -25,7 +25,7 @@ export default function DiaryGraph({ data }) {
             },
             labels: {
                 fill: globalStyles.color.yellow,
-                fontSize: 18
+                fontSize: 10
             }
           }}
         />

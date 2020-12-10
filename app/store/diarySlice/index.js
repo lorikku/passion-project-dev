@@ -32,15 +32,12 @@ export const diarySlice = createSlice({
     },
     //Add analysis data to diary entry for generating graph later on
     addAnalysisDataToEntry: (state, action) => {
-      const { trackerName, elapsedTime, deviation } = action.payload;
-      const entry = state.find((entry) => entry.trackerName === trackerName);
-      if (entry) {
-        entry.analysisData.push({
+      const { elapsedTime, deviation } = action.payload;
+        state[0].analysisData.push({
           deviation,
           elapsedTime,
           rem: false
         });
-      }
     },
     reportRemToEntry: (state, action) => {
       const trackerName = action.payload;

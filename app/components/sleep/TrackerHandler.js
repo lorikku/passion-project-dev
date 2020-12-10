@@ -62,7 +62,6 @@ export default TrackerHandler = ({ active }) => {
       const analysisElapsedTime = trackerData[trackerData.length - 1].elapsedTime;
       dispatch(
         addAnalysisDataToEntry({
-          trackerName: tracker.activeTracker,
           elapsedTime: analysisElapsedTime,
           deviation: analysisDeviation,
         })
