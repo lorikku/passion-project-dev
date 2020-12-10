@@ -51,12 +51,16 @@ export const diarySlice = createSlice({
         //Set REM value of last analysis made to true
         entry.analysisData[entry.analysisData.length - 1].rem = true;
       }
+    },
+    purgeDiary: (state) => {
+      state.length = 0;
+      console.log('diary purged');
     }
   },
 });
 
 //Export reducer functions to use it in dispatch in components
-export const { addDiaryEntry, deleteDiaryEntry, addAnalysisDataToEntry, makeEntryAvailible, reportRemToEntry } = diarySlice.actions;
+export const { addDiaryEntry, deleteDiaryEntry, addAnalysisDataToEntry, makeEntryAvailible, reportRemToEntry, purgeDiary } = diarySlice.actions;
 
 //Select diary query to read data from diary state
 export const selectDiary = (store) => store.diary;

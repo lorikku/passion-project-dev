@@ -7,8 +7,8 @@ import {
   requestPermissionsAsync,
 } from 'expo-notifications';
 
-import { useSelector } from 'react-redux';
-import { selectChecker } from '../../store/checkerSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { purgeRealityChecks, selectChecker } from '../../store/checkerSlice';
 
 import globalStyles from '../../styles';
 
@@ -30,11 +30,12 @@ getPermissionsAsync().then(() => {
 });
 
 export default RealityCheck = ({ navigation }) => {
+  const dispatch = useDispatch();
   const checker = useSelector(selectChecker);
   const navigateToInput = () => navigation.navigate('RealityCheckInput');
   return (
     <View style={styles.container}>
-      <Text style={styles.subtitle}>Reality Checks</Text>
+      <Text onLongPress={() => dispatch(purgeRealityChecks())} style={styles.subtitle}>Reality Checks</Text>
       <View style={styles.contentWrapper}>
         {checker.length === 0 ? (
           <EmptyList />

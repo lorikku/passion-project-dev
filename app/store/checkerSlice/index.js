@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { cancelAllScheduledNotificationsAsync } from 'expo-notifications';
 //Importing async thunks from other file
 import {
   addRealityCheckThunk,
@@ -15,6 +16,12 @@ currently scheduled notifications to store */
 export const checkerSlice = createSlice({
   name: 'checker',
   initialState,
+  reducers: {
+    purgeRealityChecks: (state) => {
+      cancelAllScheduledNotificationsAsync(), (state.length = 0);
+      console.log('checks purged');
+    },
+  },
   extraReducers: {
     [addRealityCheckThunk.fulfilled]: (state, action) => {
       //"Reality check" model structure
@@ -38,12 +45,15 @@ export const checkerSlice = createSlice({
 });
 
 /* EXPORTS */
-//Export thunk thunk functions with normalized names
+//Export thunk reducers with normalized names
 export {
   addRealityCheckThunk as addRealityCheckAsync,
   toggleRealityCheckThunk as toggleRealityCheckAsync,
   deleteRealityCheckThunk as deleteRealityCheckAsync,
 };
+
+//Export normal reducers
+export const { purgeRealityChecks } = checkerSlice.actions;
 
 //Export select checker query to read data from checker state
 export const selectChecker = (store) => store.checker;

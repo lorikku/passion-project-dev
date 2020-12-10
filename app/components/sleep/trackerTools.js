@@ -2,11 +2,12 @@ const trackerTools = {
   //Interval for fetching accelerometer data (in ms)
   acceleroInterval: 500,
   //Interval for analysing data (in ms)
-  analyseInterval: 3 /* m */ * 60 /* s */ * 1000 /* ms */ /* equals to 3 minutes */,
+  analyseInterval:  3 /* m */ * 60 /* s */ * 1000 /* ms */ /* equals to 3 minutes */,
 
   //Analysis movement detection threshold
-  movementThreshold: 0.0011, //threshold good enough, accepts even heavy breathing but not the slightest movement
-  //movementThreshold: 0.00099, -> threshold too narrow, detects breathing too
+  // movementThreshold: 0.0011, //threshold too big
+  // movementThreshold: 0.000105,
+  movementThreshold: 0.00095, //-> threshold too narrow, detects breathing too
 
   deviationAmount: 5, //Amount of "noDeviations" required before assuming user is in a REM state
 
@@ -18,7 +19,7 @@ const trackerTools = {
     const secs = ~~timeSec % 60;
 
     let res = '';
-    if (hrs < 0) {
+    if (hrs > 0) {
       res += '0' + hrs + ':' + (mins < 10 ? '0' : '');
     }
     res += '' + mins + ':' + (secs < 10 ? '0' : '');

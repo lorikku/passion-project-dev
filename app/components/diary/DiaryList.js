@@ -1,11 +1,14 @@
 import * as React from 'react';
-import { Alert, Dimensions, StyleSheet, Text, View } from 'react-native';
+import { Alert, Dimensions, Platform, StyleSheet, Text, View } from 'react-native';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 
 import { useDispatch } from 'react-redux';
 import { deleteDiaryEntry } from '../../store/diarySlice/index';
 
+import trackerTools from '../sleep/trackerTools';
 import globalStyles from '../../styles';
+
+const {formatTime} = trackerTools;
 
 export default DiaryList = ({ navigation, data }) => {
   const dispatch = useDispatch();
@@ -47,7 +50,7 @@ export default DiaryList = ({ navigation, data }) => {
               <View>
                 <Text
                   style={styles.headerText}
-                >{`${date.toLocaleDateString()} • ${date.toLocaleTimeString()}`}</Text>
+                >{`${date.toLocaleDateString()} • ${formatTime(entry.analysisData[entry.analysisData.length - 1].elapsedTime)}`}</Text>
                 <Text
                   style={[
                     styles.bodyText,
@@ -103,7 +106,7 @@ const styles = StyleSheet.create({
     fontFamily: globalStyles.text.title.fontFamily,
     color: globalStyles.color.white,
     fontSize: 16,
-    marginBottom: -13,
+    marginBottom: Platform.OS === 'android' ? -13 : 0,
   },
   remText: {
     ...globalStyles.text.compact,

@@ -37,7 +37,7 @@ export default TrackerHandler = ({ active }) => {
 
   //Analyse data function
   const analyseData = () => {
-    ///1. Copy "to-be-purged" aka current acceleroData to "data"
+    ///1. Copy "to-be-purged" aka current acceleroData to "trackerData"
     const trackerData = tracker.acceleroData;
 
     ///2. Purge the current state
@@ -48,18 +48,18 @@ export default TrackerHandler = ({ active }) => {
     const filteredData = trackerData.map((obj) => obj.data);
 
     //If movement deviation has been deteceted in the last amount of "analyseInterval", increment state
-    const analysisElapsedTime = trackerData[trackerData.length - 1].elapsedTime;
     const analysisDeviation = calcDeviation(filteredData);
 
     if (analysisDeviation) {
       if (analysisDeviation < movementThreshold) {
         setNoDeviation((prevState) => prevState + 1);
       } else {
-        setNoDeviation(0);
         console.log('movement detected :(', analysisDeviation);
+        setNoDeviation(0);
       }
 
       //Add analysis data to diary entry for generating graph later on
+      const analysisElapsedTime = trackerData[trackerData.length - 1].elapsedTime;
       dispatch(
         addAnalysisDataToEntry({
           trackerName: tracker.activeTracker,
@@ -82,7 +82,7 @@ export default TrackerHandler = ({ active }) => {
         console.log(
           'PERSON IS DEFINETELY PARALYZED -> REM PHASE! #' + noDeviation
         );
-        playbackObject.playFromPositionAsync(0);
+        // playbackObject.playFromPositionAsync(0);
         setNoDeviation(0);
         dispatch(reportRemToEntry(tracker.activeTracker));
         break;
