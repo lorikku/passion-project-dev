@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { purgeDiary, selectDiary } from '../../store/diarySlice';
+import { makeEntryAvailible, purgeDiary, selectDiary } from '../../store/diarySlice';
 
 import DiaryList from '../../components/diary/DiaryList';
 import EmptyList from '../../components/general/EmptyList';
@@ -13,7 +13,7 @@ export default RealityCheck = ({ navigation }) => {
   const diary = useSelector(selectDiary); 
   return (
     <View style={styles.container}>
-      <Text onLongPress={() => dispatch(purgeDiary())} style={styles.subtitle}>Diary</Text>
+      <Text onPress={() => dispatch(makeEntryAvailible())} onLongPress={() => dispatch(purgeDiary())} style={styles.subtitle}>Diary</Text>
       <View style={styles.contentWrapper}>
         {diary.length === 0 || diary.findIndex(entry => entry.availible === true) === -1 ? (
           <EmptyList diary={true} navigation={navigation} />

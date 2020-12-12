@@ -8,7 +8,7 @@ import SleepButton from '../../components/sleep/SleepButton';
 import TrackerHandler from '../../components/sleep/TrackerHandler';
 import globalStyles from '../../styles';
 
-export default Sleep = () => {
+export default Sleep = ({navigation}) => {
   const tracker = useSelector(selectTracker);
 
   return (
@@ -17,7 +17,7 @@ export default Sleep = () => {
         {tracker.activeTracker ? 'Tracking' : 'Standby'}
       </Text>
       <View style={styles.buttonWrapper}>
-        <SleepButton active={tracker.activeTracker} />
+        <SleepButton navigation={navigation} active={tracker.activeTracker} />
         <TrackerHandler active={tracker.activeTracker} />
       </View>
     </View>

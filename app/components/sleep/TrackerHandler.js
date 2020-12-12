@@ -45,10 +45,10 @@ export default TrackerHandler = ({ active }) => {
 
     ///3. Analyse the copied state
     //Filter all data values from data array
-    const filteredData = trackerData.map((obj) => obj.data);
+    const mappedData = trackerData.map((obj) => obj.data);
 
     //If movement deviation has been deteceted in the last amount of "analyseInterval", increment state
-    const analysisDeviation = calcDeviation(filteredData);
+    const analysisDeviation = calcDeviation(mappedData);
 
     if (analysisDeviation) {
       if (analysisDeviation < movementThreshold) {

@@ -5,7 +5,7 @@ import RealityCheckScreen from '../screens/reality-check';
 import SleepScreen from '../screens/sleep';
 import DiaryScreen from '../screens/diary';
 
-import { Keyboard, Platform, Text } from 'react-native';
+import { Keyboard, Platform, StyleSheet, Text } from 'react-native';
 
 import globalStyles from '../styles';
 import { useSelector } from 'react-redux';
@@ -22,15 +22,24 @@ export default function BottomTabNavigator() {
   const ui = useSelector(selectUi);
   //Hide bottom navigation on keyboard show and vice versa
   const [visibleNav, setNavVisible] = React.useState(true);
+  
   React.useEffect(() => {
-    Keyboard.addListener(
+    //Lisetner for when keyboard will show
+    const keyboardShowListener = Keyboard.addListener(
       Platform.OS === 'android' ? 'keyboardDidShow' : 'keyboardWillShow',
       () => setNavVisible(false)
     );
-    Keyboard.addListener(
+
+    //Lisetner for when keyboard will hide
+    const keyboardHideListener = Keyboard.addListener(
       Platform.OS === 'android' ? 'keyboardDidHide' : 'keyboardWillHide',
       () => setNavVisible(true)
     );
+
+    return () => {
+      keyboardShowListener.remove();
+      keyboardHideListener.remove();
+    }
   }, []);
 
   return (
@@ -38,14 +47,13 @@ export default function BottomTabNavigator() {
       tabBarOptions={{
         style: {
           opacity: !visibleNav || ui.fullScreen ? 0 : 1,
-          paddingTop: !visibleNav || ui.fullScreen ? 0 : 40,
-          height: !visibleNav || ui.fullScreen ? 0 : 90,
+          height: !visibleNav || ui.fullScreen ? 0 : 110,
           paddingBottom:
             !visibleNav || ui.fullScreen
               ? 0
               : Platform.OS === 'android'
-              ? 30
-              : 70,
+              ? 10
+              : 30,
           backgroundColor:
             !visibleNav || ui.fullScreen
               ? 'transparent'
@@ -67,7 +75,7 @@ export default function BottomTabNavigator() {
         })}
         options={{
           title: 'Reality Check',
-          tabBarLabel: () => null,
+          tabBarLabel: () => <Text style={styles.labelText}>Checks</Text>,
           tabBarIcon: ({ focused }) => <RealityCheckNav focused={focused} />,
         }}
       />
@@ -81,7 +89,7 @@ export default function BottomTabNavigator() {
         })}
         options={{
           title: 'Sleep',
-          tabBarLabel: () => null,
+          tabBarLabel: () => <Text style={styles.labelText}>Sleep</Text>,
           tabBarIcon: ({ focused }) => <SleepNav focused={focused} />,
         }}
       />
@@ -95,10 +103,19 @@ export default function BottomTabNavigator() {
         })}
         options={{
           title: 'Diary',
-          tabBarLabel: () => null,
+          tabBarLabel: () => <Text style={styles.labelText}>Diary</Text>,
           tabBarIcon: ({ focused }) => <DiaryNav focused={focused} />,
         }}
       />
     </BottomTab.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  labelText: {
+    fontFamily: globalStyles.text.compact.fontFamily,
+    color: globalStyles.color.white,
+    fontSize: 14,
+    marginTop: Platform.OS === 'android' ? -20 : -10
+  }
+})

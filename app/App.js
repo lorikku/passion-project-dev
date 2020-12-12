@@ -71,7 +71,7 @@ export default function App(props) {
           <View style={styles.statusBar}>
             <StatusBar
               translucent
-              style="inverted"
+              style='light'
               backgroundColor={'transparent'}
             />
           </View>

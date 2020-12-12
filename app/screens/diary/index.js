@@ -15,6 +15,7 @@ export default () => {
         component={Diary}
         options={{
           gestureEnabled: false,
+          animationEnabled: false,
         }}
       />
       <Stack.Screen

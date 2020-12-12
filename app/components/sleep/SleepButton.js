@@ -1,19 +1,18 @@
 import * as React from 'react';
 import { Alert } from 'react-native';
 import * as Brightness from 'expo-brightness';
-import {activateKeepAwake, deactivateKeepAwake} from 'expo-keep-awake';
+import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
 
-import { useDispatch, useSelector } from 'react-redux';
-import { addDiaryEntry, makeEntryAvailible } from '../../store/diarySlice';
-import { selectTracker, toggleTracker } from '../../store/trackerSlice';
+import { useDispatch } from 'react-redux';
+import { addDiaryEntry} from '../../store/diarySlice';
+import { toggleTracker } from '../../store/trackerSlice';
 import trackerTools from './trackerTools';
 
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import SleepIcon from '../svg/elements/SleepIcon';
 
-export default SleepButton = ({ active }) => {
+export default SleepButton = ({ navigation, active }) => {
   const dispatch = useDispatch();
-  const tracker = useSelector(selectTracker);
 
   const handleTrackerToggle = () => {
     if (active) {
@@ -29,13 +28,25 @@ export default SleepButton = ({ active }) => {
             text: "Yes, I'm awake!",
             onPress: () => {
               //Set brightness back to system brightness
-              Brightness.getPermissionsAsync().then(({ status }) => status === 'granted' && Brightness.useSystemBrightnessAsync());
-              //Make entry availible in diary list
-              dispatch(makeEntryAvailible(tracker.activeTracker));
+              Brightness.getPermissionsAsync().then(
+                ({ status }) =>
+                  status === 'granted' && Brightness.useSystemBrightnessAsync()
+              );
               //Disable tracker
               dispatch(toggleTracker(undefined));
               //To let screen sleep
               deactivateKeepAwake('tracker');
+              //Navigate to diary list first to load it in as "first stack"
+              navigation.navigate('DiaryScreen', {
+                screen: 'Diary',
+              });
+              //Then navigate to diary detail
+              navigation.navigate('DiaryScreen', {
+                screen: 'DiaryDetail',
+                params: {
+                  trackerName: active,
+                },
+              });
             },
           },
         ],
@@ -44,7 +55,9 @@ export default SleepButton = ({ active }) => {
     } else {
       /* NEW TRACKING SESSION */
       //Set lowest possible brightness to save batteries
-      Brightness.getPermissionsAsync().then(({ status }) => status === 'granted' && Brightness.setBrightnessAsync(0));
+      Brightness.getPermissionsAsync().then(
+        ({ status }) => status === 'granted' && Brightness.setBrightnessAsync(0)
+      );
       //Generate a filename and activate tracker
       const fileName = trackerTools.generateFileName();
       //Activate tracker with filename (used as id)

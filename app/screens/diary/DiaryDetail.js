@@ -5,52 +5,44 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectDiary } from '../../store/diarySlice';
 
-import DiaryGraph from '../../components/diary/DiaryGraph';
 import BackIcon from '../../components/svg/elements/BackIcon';
 import globalStyles from '../../styles';
+import EntryAvailible from '../../components/diary/detail/EntryAvailible';
+import EntryUnavailible from '../../components/diary/detail/EntryUnavailible';
 
 export default DiaryDetail = ({ navigation, route }) => {
   const dispatch = useDispatch();
   const diary = useSelector(selectDiary);
 
-  const [loadedEntry, setLoadedEntry] = React.useState(undefined);
-
-  const navigateBack = () => navigation.goBack();
+  //Navigate back to diary list
+  const navigateBack = () => navigation.navigate('Diary');
 
   //Load entry
-  React.useState(() => {
-    setLoadedEntry(
-      diary.find((entry) => entry.trackerName === route.params.trackerName)
-    );
-  }, []);
+  const loadedEntry = diary.find((entry) => entry.trackerName === route.params.trackerName);
 
-  return (
+  return loadedEntry ? (
     <View style={styles.container}>
       <View style={styles.headerWrapper}>
         <TouchableOpacity style={styles.backButton} onPress={navigateBack}>
           <BackIcon />
         </TouchableOpacity>
         <Text style={styles.subtitle}>
-          {loadedEntry
-            ? new Date(
-                parseInt(loadedEntry.trackerName.split('_')[1])
-              ).toLocaleDateString()
-            : 'Loading entry...'}
+          {new Date(
+            parseInt(loadedEntry.trackerName.split('_')[1])
+          ).toLocaleDateString()}
         </Text>
         <View style={{ opacity: 0 }}>
           <BackIcon />
         </View>
       </View>
-      <View style={styles.contentWrapper}>
-        <View>
-        {/* <Text style={styles.headerText}>Dream recording audio</Text> */}
-        </View>
-        <View>
-          <Text style={styles.headerText}>Sleep movement analysis graph</Text>
-          {loadedEntry && <DiaryGraph data={loadedEntry.analysisData} />}
-        </View>
-      </View>
+      {loadedEntry.availible ? (
+        <EntryAvailible entry={loadedEntry} />
+      ) : (
+        <EntryUnavailible trackerName={route.params.trackerName} />
+      )}
     </View>
+  ) : (
+    <Text style={[styles.headerWrapper, styles.subtitle]}>Loading...</Text>
   );
 };
 
@@ -87,6 +79,6 @@ const styles = StyleSheet.create({
     ...globalStyles.text.compact,
     color: globalStyles.color.white,
     fontSize: 20,
-    marginBottom: 10
+    marginBottom: 10,
   },
 });

@@ -1,5 +1,12 @@
 import * as React from 'react';
-import { Alert, Dimensions, Platform, StyleSheet, Text, View } from 'react-native';
+import {
+  Alert,
+  Dimensions,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 
 import { useDispatch } from 'react-redux';
@@ -8,11 +15,10 @@ import { deleteDiaryEntry } from '../../store/diarySlice/index';
 import trackerTools from '../sleep/trackerTools';
 import globalStyles from '../../styles';
 
-const {formatTime} = trackerTools;
+const { formatTime } = trackerTools;
 
 export default DiaryList = ({ navigation, data }) => {
   const dispatch = useDispatch();
-
   const navigateToDetail = (trackerName) => {
     navigation.navigate('DiaryDetail', {
       trackerName,
@@ -50,6 +56,7 @@ export default DiaryList = ({ navigation, data }) => {
               <View>
                 <Text
                   style={styles.headerText}
+                  // entry.analysisData[entry.analysisData.length - 1].elapsedTime
                 >{`${date.toLocaleDateString()} • ${formatTime(entry.analysisData[entry.analysisData.length - 1].elapsedTime)}`}</Text>
                 <Text
                   style={[

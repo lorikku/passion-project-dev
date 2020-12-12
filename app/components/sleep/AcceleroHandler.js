@@ -22,7 +22,6 @@ export default AcceleroHandler = ({
   analyseData,
   setNoDeviation,
 }) => {
-
   //Redux hooks
   const dispatch = useDispatch();
 
@@ -54,7 +53,6 @@ export default AcceleroHandler = ({
 
         //The "timer" variable gets increased by the acceleroInterval (in milliseconds)
         setTimer((prevState) => prevState + acceleroInterval);
-
       }, acceleroInterval);
       //acceleroListener.remove() and stopInterval() get returned in a cleanup function for React's useEffect. This prevents multiple listeners from stacking
       return () => {
@@ -77,15 +75,17 @@ export default AcceleroHandler = ({
   /* useEffect which will dispatch tracker data every time the timer increases
   I did this in a seperate useEffect so that the "timer" wouldn't restart the useEffect containing the listener, thus drifting the time */
   React.useEffect(() => {
-    dispatch(
-      addTrackerData({
-        data: dataX,
-        elapsedTime: timer,
-      })
-    );
+    if (active) {
+      dispatch(
+        addTrackerData({
+          data: dataX,
+          elapsedTime: timer,
+        })
+      );
 
-    //Analyse of tracked data gets called once every interval (specified in analyseInterval in trackerTools)
-    Date.now() > nextAnalyse && analyseData();
+      //Analyse of tracked data gets called once every interval (specified in analyseInterval in trackerTools)
+      Date.now() > nextAnalyse && analyseData();
+    }
   }, [timer]);
 
   return null;
