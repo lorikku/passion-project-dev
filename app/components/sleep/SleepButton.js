@@ -4,7 +4,7 @@ import * as Brightness from 'expo-brightness';
 import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
 
 import { useDispatch } from 'react-redux';
-import { addDiaryEntry} from '../../store/diarySlice';
+import { addDiaryEntry, makeEntryAvailible} from '../../store/diarySlice';
 import { toggleTracker } from '../../store/trackerSlice';
 import trackerTools from './trackerTools';
 
@@ -34,6 +34,8 @@ export default SleepButton = ({ navigation, active }) => {
               );
               //Disable tracker
               dispatch(toggleTracker(undefined));
+              //Make tracker availible in list
+              dispatch(makeEntryAvailible(active))
               //To let screen sleep
               deactivateKeepAwake('tracker');
               //Navigate to diary list first to load it in as "first stack"
@@ -45,6 +47,7 @@ export default SleepButton = ({ navigation, active }) => {
                 screen: 'DiaryDetail',
                 params: {
                   trackerName: active,
+                  recordAudio: true
                 },
               });
             },

@@ -4,7 +4,10 @@ import { Audio } from 'expo-av';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { purgeTrackerData, selectTracker } from '../../store/trackerSlice';
-import { addAnalysisDataToEntry, reportRemToEntry } from '../../store/diarySlice';
+import {
+  addAnalysisDataToEntry,
+  reportRemToEntry,
+} from '../../store/diarySlice';
 
 import { deviation as calcDeviation } from 'd3';
 
@@ -31,9 +34,9 @@ export default TrackerHandler = ({ active }) => {
   const [timer, setTimer] = React.useState(0);
 
   //Real-time analysis states
-  const [playbackObject, setPlaybackObject] = React.useState(undefined);
-  const [nextAnalyse, setNextAnalyse] = React.useState(undefined);
   const [noDeviation, setNoDeviation] = React.useState(0);
+  const [nextAnalyse, setNextAnalyse] = React.useState(undefined);
+  const [playbackObject, setPlaybackObject] = React.useState(undefined);
 
   //Analyse data function
   const analyseData = () => {
@@ -51,22 +54,24 @@ export default TrackerHandler = ({ active }) => {
     const analysisDeviation = calcDeviation(mappedData);
 
     if (analysisDeviation) {
-      if (analysisDeviation < movementThreshold) {
-        setNoDeviation((prevState) => prevState + 1);
-      } else {
-        console.log('movement detected :(', analysisDeviation);
-        setNoDeviation(0);
-      }
-
       //Add analysis data to diary entry for generating graph later on
-      const analysisElapsedTime = trackerData[trackerData.length - 1].elapsedTime;
+      const analysisElapsedTime =
+        trackerData[trackerData.length - 1].elapsedTime;
       dispatch(
         addAnalysisDataToEntry({
           elapsedTime: analysisElapsedTime,
           deviation: analysisDeviation,
         })
       );
+
+      if (analysisDeviation < movementThreshold) {
+        setNoDeviation((prevState) => prevState + 1);
+      } else {
+        console.log('movement detected :(', analysisDeviation);
+        setNoDeviation(0);
+      }
     }
+
     //Set next interval for analysing
     setNextAnalyse(generateFutureTime(analyseInterval));
   };

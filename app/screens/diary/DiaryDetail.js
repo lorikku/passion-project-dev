@@ -7,8 +7,8 @@ import { selectDiary } from '../../store/diarySlice';
 
 import BackIcon from '../../components/svg/elements/BackIcon';
 import globalStyles from '../../styles';
-import EntryAvailible from '../../components/diary/detail/EntryAvailible';
-import EntryUnavailible from '../../components/diary/detail/EntryUnavailible';
+import EntryDetail from '../../components/diary/detail/EntryDetail';
+import EntryRecordAudio from '../../components/diary/detail/EntryRecordAudio';
 
 export default DiaryDetail = ({ navigation, route }) => {
   const dispatch = useDispatch();
@@ -18,9 +18,11 @@ export default DiaryDetail = ({ navigation, route }) => {
   const navigateBack = () => navigation.navigate('Diary');
 
   //Load entry
-  const loadedEntry = diary.find((entry) => entry.trackerName === route.params.trackerName);
+  const loadedEntry = diary.find(
+    (entry) => entry.trackerName === route.params.trackerName
+  );
 
-  return loadedEntry ? (
+  return (
     <View style={styles.container}>
       <View style={styles.headerWrapper}>
         <TouchableOpacity style={styles.backButton} onPress={navigateBack}>
@@ -35,14 +37,15 @@ export default DiaryDetail = ({ navigation, route }) => {
           <BackIcon />
         </View>
       </View>
-      {loadedEntry.availible ? (
-        <EntryAvailible entry={loadedEntry} />
+      {route.params.recordAudio ? (
+        <EntryRecordAudio
+          navigation={navigation}
+          trackerName={route.params.trackerName}
+        />
       ) : (
-        <EntryUnavailible trackerName={route.params.trackerName} />
+        <EntryDetail navigation={navigation} entry={loadedEntry} />
       )}
     </View>
-  ) : (
-    <Text style={[styles.headerWrapper, styles.subtitle]}>Loading...</Text>
   );
 };
 

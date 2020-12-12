@@ -22,6 +22,7 @@ export default DiaryList = ({ navigation, data }) => {
   const navigateToDetail = (trackerName) => {
     navigation.navigate('DiaryDetail', {
       trackerName,
+      recordAudio: false
     });
   };
 

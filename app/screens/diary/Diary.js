@@ -13,7 +13,7 @@ export default RealityCheck = ({ navigation }) => {
   const diary = useSelector(selectDiary); 
   return (
     <View style={styles.container}>
-      <Text onPress={() => dispatch(makeEntryAvailible())} onLongPress={() => dispatch(purgeDiary())} style={styles.subtitle}>Diary</Text>
+      <Text onLongPress={() => dispatch(purgeDiary())} style={styles.subtitle}>Diary</Text>
       <View style={styles.contentWrapper}>
         {diary.length === 0 || diary.findIndex(entry => entry.availible === true) === -1 ? (
           <EmptyList diary={true} navigation={navigation} />

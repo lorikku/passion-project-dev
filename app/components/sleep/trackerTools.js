@@ -2,7 +2,7 @@ const trackerTools = {
   //Interval for fetching accelerometer data (in ms)
   acceleroInterval: 500,
   //Interval for analysing data (in ms)
-  analyseInterval:  4 /* m */ * 60 /* s */ * 1000 /* ms */ /* equals to 3 minutes */,
+  analyseInterval:  2 /* m */ * 1 /* s */ * 1000 /* ms */ /* equals to 3 minutes */,
 
   //Analysis movement detection threshold
   movementThreshold: 0.0020, //threshold too big

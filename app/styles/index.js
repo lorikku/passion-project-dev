@@ -8,7 +8,8 @@ const globalStyles = {
     darkBackground: '#001927',
     gray: '#D8D8D8',
     blue: '#0C3953',
-    lightblue: "#5BA4CF"
+    lightblue: "#5BA4CF",
+    red: "#CF5B5B"
   },
   text: {
     title: { fontFamily: 'sfProRoundedBold', fontSize: 80 },

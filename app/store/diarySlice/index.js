@@ -16,15 +16,15 @@ export const diarySlice = createSlice({
         remAmount: 0,
       });
     },
-    makeEntryAvailible: (state, action) => {
-      let entry;
-
-      if (action.payload) {
-        entry = state.find((entry) => entry.trackerName === action.payload);
-      } else {
-        state.forEach((entry) => (entry.availible = true));
+    setEntryAudioUri: (state, action) => {
+      const {trackerName, audioUri} = action.payload;
+      const entry = state.find((entry) => entry.trackerName === trackerName);
+      if (entry) {
+        entry.audioUri = audioUri;
       }
-
+    },
+    makeEntryAvailible: (state, action) => {
+      const entry = state.find((entry) => entry.trackerName === action.payload);
       if (entry) {
         entry.availible = true;
       }
