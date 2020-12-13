@@ -1,26 +1,56 @@
 import * as React from 'react';
-import { Platform, StyleSheet, Text, View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { StyleSheet, Text, View } from 'react-native';
 import { Audio } from 'expo-av';
 import * as FileSystem from 'expo-file-system';
 
 import { useDispatch } from 'react-redux';
+import { setEntryAudioUriAsyc } from '../../../store/diarySlice';
+
+import Explanation from './audio-handling/Explanation';
+import RecordButtons from './audio-handling/RecordButtons';
+import StatusDisplay from './audio-handling/StatusDisplay';
 
 import globalStyles from '../../../styles';
-import Explanation from './audio-recording/Explanation';
+
+const RECORDING_OPTIONS_PRESET_LOW_QUALITY = {
+  android: {
+    extension: '.3gp',
+    outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_THREE_GPP,
+    audioEncoder: Audio.RECORDING_OPTION_ANDROID_AUDIO_ENCODER_AMR_NB,
+    sampleRate: 44100,
+    numberOfChannels: 2,
+    bitRate: 128000,
+  },
+  ios: {
+    extension: '.mp3',
+    audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_MIN,
+    sampleRate: 44100,
+    numberOfChannels: 2,
+    bitRate: 128000,
+    linearPCMBitDepth: 16,
+    linearPCMIsBigEndian: false,
+    linearPCMIsFloat: false,
+  },
+};
 
 const messages = {
-  IDLE: '--/60s',
+  IDLE: 'No recording made',
   PERMISSIONS: 'Checking permissions',
   PREPARE: 'Preparing your recording',
   RUN: 'run',
-  SAVING: 'Saving recording',
+  SAVING: 'Saving recorded audio',
 };
 //Variable used when component unmounts, scroll down to "emergencyStopRecording" for more
 let recordingStateAtUnmount = undefined;
 
 //Component for prompting to record dream/audio
-export default EntryRecordAudio = ({ navigation, trackerName }) => {
+export default EntryRecordAudio = ({
+  navigation,
+  trackerName,
+  currentAudioUri,
+  audioSaving,
+  deleteAudio,
+}) => {
   const dispatch = useDispatch();
 
   const navigateToEntryDetail = () =>
@@ -34,48 +64,64 @@ export default EntryRecordAudio = ({ navigation, trackerName }) => {
   const [message, setMessage] = React.useState(messages.IDLE);
   const [timeElapsed, setTimeElapsed] = React.useState(0);
 
-
   //Recording states
   const [recordingObject, setRecordingObject] = React.useState(false);
-  const [playbackObject, setPlaybackObject] = React.useState(undefined);
 
+  //Normal start recording functionc
   const startRecording = async () => {
     setDisabledButton(true);
-    setMessage(messages.PERMISSIONS);
 
-    await Audio.requestPermissionsAsync();
+    //Get permissions
+    setMessage(messages.PERMISSIONS);
+    const perms = await Audio.requestPermissionsAsync();
     await Audio.setAudioModeAsync({
       allowsRecordingIOS: true,
       playsInSilentModeIOS: true,
     });
 
+    //Prepare recording
     setMessage(messages.PREPARE);
+    if (perms.granted) {
+      //If permissions granted
+      const recording = new Audio.Recording();
+      await recording.prepareToRecordAsync(
+        Audio.RECORDING_OPTIONS_PRESET_LOW_QUALITY
+      );
+      await recording.startAsync();
 
-    const recording = new Audio.Recording();
-    await recording.prepareToRecordAsync(
-      Audio.RECORDING_OPTIONS_PRESET_LOW_QUALITY
-    );
-    await recording.startAsync();
+      setRecordingObject(recording);
+      console.log('-------------- recording started! :) --------------');
 
-    setRecordingObject(recording);
+      //If permissions not granted
+    } else {
+      setMessage(messages.IDLE);
+      console.log('no premission granted :(');
+    }
+
     setDisabledButton(false);
-    console.log('recording started! :)');
   };
 
+  //Normal stop recording function
   const stopRecording = async () => {
     setDisabledButton(true);
+
+    //Saving audio recording
     setMessage(messages.SAVING);
-
     await recordingObject.stopAndUnloadAsync();
-    const uri = recordingObject.getURI();
-    console.log(uri);
+    const newCacheUri = recordingObject.getURI();
+    console.log('file saved in cache!');
 
-    await FileSystem.deleteAsync(uri);
+    dispatch(
+      setEntryAudioUriAsyc({
+        trackerName,
+        oldAudioUri: currentAudioUri,
+        newCacheUri,
+      })
+    );
 
     setRecordingObject(undefined);
-    setDisabledButton(false);
     setMessage(messages.IDLE);
-    console.log('recording saved (and then deleted)! :)');
+    setDisabledButton(false);
   };
 
   //Used as an 'emergency stop' function if user unmounts component while still recording
@@ -103,18 +149,6 @@ export default EntryRecordAudio = ({ navigation, trackerName }) => {
     recordingStateAtUnmount = recordingObject;
   }, [recordingObject]);
 
-  //Function to get parse time
-  const getTime = (timeToParse) => {
-    let res = '';
-    const time = Math.round(timeToParse / 1000);
-    if (time.toString().length === 1) {
-      res += '0';
-    }
-    res += time.toString();
-    res += '/90s';
-    return res;
-  };
-
   //Subscribing to status and update time
   React.useEffect(() => {
     if (recordingObject) {
@@ -129,50 +163,28 @@ export default EntryRecordAudio = ({ navigation, trackerName }) => {
     return () => setTimeElapsed(0);
   }, [recordingObject]);
 
+  // COMPONENT
   return (
     <View style={styles.contentWrapper}>
-      <Explanation />
+      <Explanation audioUri={currentAudioUri} />
       {/* Time tracking */}
-      <Text style={[styles.timer, { opacity: recordingObject ? 1 : 0.4 }]}>
-        {recordingObject ? getTime(timeElapsed) : message}
-      </Text>
+      <StatusDisplay
+        audioSaving={audioSaving}
+        currentAudioUri={currentAudioUri}
+        recordingObject={recordingObject}
+        timeElapsed={timeElapsed}
+        message={message}
+        messages={messages}
+        deleteAudio={deleteAudio}
+      />
       {/* Buttons */}
-      <View style={{ alignItems: 'center', opacity: disabledButton ? 0.4 : 1 }}>
-        <TouchableOpacity
-          disabled={disabledButton}
-          style={[
-            styles.recordButton,
-            {
-              backgroundColor: !recordingObject
-                ? globalStyles.color.white
-                : globalStyles.color.red,
-            },
-          ]}
-          onPress={!recordingObject ? startRecording : stopRecording}
-        >
-          <Text
-            style={[
-              styles.recordButtonText,
-              {
-                color: recordingObject
-                  ? globalStyles.color.white
-                  : globalStyles.color.red,
-              },
-            ]}
-          >
-            {disabledButton
-              ? 'Standby'
-              : recordingObject
-              ? 'Stop recording'
-              : 'Start recording'}
-          </Text>
-        </TouchableOpacity>
-        {!recordingObject && (
-          <Text onPress={navigateToEntryDetail} style={styles.recordLater}>
-            I'll do this later
-          </Text>
-        )}
-      </View>
+      <RecordButtons
+        disabledButton={disabledButton}
+        recordingObject={recordingObject}
+        startRecording={startRecording}
+        stopRecording={stopRecording}
+        navigateToEntryDetail={navigateToEntryDetail}
+      />
     </View>
   );
 };
@@ -186,31 +198,5 @@ const styles = StyleSheet.create({
 
     justifyContent: 'space-between',
     alignItems: 'center',
-  },
-  timer: {
-    ...globalStyles.text.compact,
-    color: globalStyles.color.lightblue,
-    fontSize: 30,
-  },
-  recordButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 200,
-
-    marginBottom: 15,
-    borderRadius: 30,
-    paddingHorizontal: 30,
-    paddingVertical: Platform.OS === 'ios' ? 17 : 10,
-  },
-  recordButtonText: {
-    fontFamily: globalStyles.text.subTitle.fontFamily,
-    fontSize: 18,
-  },
-  recordLater: {
-    fontFamily: globalStyles.text.default.fontFamily,
-    fontSize: 18,
-    color: globalStyles.color.white,
-    textDecorationLine: 'underline',
   },
 });

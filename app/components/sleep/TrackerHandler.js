@@ -7,6 +7,7 @@ import { purgeTrackerData, selectTracker } from '../../store/trackerSlice';
 import {
   addAnalysisDataToEntry,
   reportRemToEntry,
+  selectDiary,
 } from '../../store/diarySlice';
 
 import { deviation as calcDeviation } from 'd3';
@@ -29,6 +30,7 @@ export default TrackerHandler = ({ active }) => {
   //Redux hooks
   const dispatch = useDispatch();
   const tracker = useSelector(selectTracker);
+  const diary = useSelector(selectDiary);
 
   //Accelerometer data pushing and timer handler states
   const [timer, setTimer] = React.useState(0);
@@ -86,9 +88,24 @@ export default TrackerHandler = ({ active }) => {
         console.log(
           'PERSON IS DEFINETELY PARALYZED -> REM PHASE! #' + noDeviation
         );
-        // playbackObject.playFromPositionAsync(0);
+        playbackObject.playFromPositionAsync(0);
         setNoDeviation(0);
-        dispatch(reportRemToEntry(tracker.activeTracker));
+
+        //Report REM detection to last analysis element IF there was no REM detected in last "max noDeviation"
+        const extractedAnalysis = diary[0].analysisData;
+        const lastPossibleRemDetected =
+          extractedAnalysis[extractedAnalysis.length - 1 - deviationAmount];
+
+        if (lastPossibleRemDetected) {
+          if (lastPossibleRemDetected.rem !== true) {
+            console.log('REM reported');
+            dispatch(reportRemToEntry(active)); //"active" equals to the active tracker name right now
+          }
+        } else {
+          console.log('REM reported');
+          dispatch(reportRemToEntry(active));
+        }
+
         break;
 
       default:
@@ -110,6 +127,7 @@ export default TrackerHandler = ({ active }) => {
       fetchAudioAsync();
     }
 
+    //Unload playbackObject when component unmounts
     return () =>
       playbackObject &&
       playbackObject.unloadAsync().then(setPlaybackObject(undefined));

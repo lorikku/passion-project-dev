@@ -1,4 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
+import * as FileSystem from 'expo-file-system';
+
+import { setEntryAudioUriThunk } from './asyncThunks';
+
+const findEntry = (state, trackerName) => {
+  const entry = state.find((entry) => entry.trackerName === trackerName);
+  return entry;
+};
 
 const initialState = [];
 
@@ -6,6 +14,7 @@ export const diarySlice = createSlice({
   name: 'diary',
   initialState,
   reducers: {
+    //Normal reducers
     addDiaryEntry: (state, action) => {
       //"Entry" model structure
       state.unshift({
@@ -16,15 +25,8 @@ export const diarySlice = createSlice({
         remAmount: 0,
       });
     },
-    setEntryAudioUri: (state, action) => {
-      const {trackerName, audioUri} = action.payload;
-      const entry = state.find((entry) => entry.trackerName === trackerName);
-      if (entry) {
-        entry.audioUri = audioUri;
-      }
-    },
     makeEntryAvailible: (state, action) => {
-      const entry = state.find((entry) => entry.trackerName === action.payload);
+      const entry = findEntry(state, action.payload);
       if (entry) {
         entry.availible = true;
       }
@@ -48,7 +50,7 @@ export const diarySlice = createSlice({
     },
     reportRemToEntry: (state, action) => {
       const trackerName = action.payload;
-      const entry = state.find((entry) => entry.trackerName === trackerName);
+      const entry = findEntry(state, trackerName);
       if (entry) {
         //Increase amount of REMS detected by 1
         entry.remAmount++;
@@ -59,6 +61,36 @@ export const diarySlice = createSlice({
     purgeDiary: (state) => {
       state.length = 0;
       console.log('diary purged');
+    },
+  },
+  //Reducers from thunks
+  extraReducers: {
+    [setEntryAudioUriThunk.rejected]: (state, action) => {
+      FileSystem.deleteAsync(action.meta.arg.oldAudioUri)
+    },
+    [setEntryAudioUriThunk.pending]: (state, action) => {
+      const { trackerName } = action.meta.arg;
+      const entry = findEntry(state, trackerName);
+      entry.audioSaving = true;
+    },
+    [setEntryAudioUriThunk.fulfilled]: (state, action) => {
+      const { trackerName, newDocumentUri } = action.payload;
+      const entry = findEntry(state, trackerName);
+
+      if (entry) {
+        if (newDocumentUri) {
+          //Change entry's audio URI to new URI
+          entry.audioUri = newDocumentUri;
+          entry.audioSaving = false;
+          // entry.audioSaving = false;
+          console.log('new file location:', entry.audioUri);
+        } else {
+          //If URI was undefined => audio got deleted for this entry => set undefined
+          entry.audioSaving = false;
+          entry.audioUri = undefined;
+          console.log('audio for this entry was unset in redux');
+        }
+      }
     },
   },
 });
@@ -72,6 +104,8 @@ export const {
   reportRemToEntry,
   purgeDiary,
 } = diarySlice.actions;
+
+export { setEntryAudioUriThunk as setEntryAudioUriAsyc };
 
 //Select diary query to read data from diary state
 export const selectDiary = (store) => store.diary;

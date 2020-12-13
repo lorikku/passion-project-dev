@@ -5,9 +5,11 @@ import { useDispatch } from 'react-redux';
 
 import DiaryGraph from '../graph/DiaryGraph';
 import DiaryGraphLoading from '../graph/DiaryGraphLoading';
+import ControlButtons from './audio-handling/ControlButtons';
+
 import globalStyles from '../../../styles';
 
-export default EntryDetail = ({ navigation, entry }) => {
+export default EntryDetail = ({ navigation, entry, deleteAudio }) => {
   const dispatch = useDispatch();
 
   const navigateToRecordAudio = () =>
@@ -17,7 +19,6 @@ export default EntryDetail = ({ navigation, entry }) => {
     });
 
   const [graphShouldLoad, setGraphShouldLoad] = React.useState(false);
-
   React.useEffect(() => {
     //Graph is a heavy component to load in when the parent component is mounting, so load this after parent component succesfully mounts instead
     setGraphShouldLoad(true);
@@ -28,7 +29,12 @@ export default EntryDetail = ({ navigation, entry }) => {
       <View>
         <Text style={styles.headerText}>Recorded dream</Text>
         {entry.audioUri ? (
-          <Text style={styles.headerText}>Recorded dream</Text>
+          <ControlButtons
+            propStyle={{ marginTop: 20}}
+            audioUri={entry.audioUri}
+            deleteAudio={deleteAudio}
+            navigateToRecordAudio={navigateToRecordAudio}
+          />
         ) : (
           <Text style={styles.bodyText}>
             You currently don't have a recorded dream.{`\n`}Do you wish to{' '}

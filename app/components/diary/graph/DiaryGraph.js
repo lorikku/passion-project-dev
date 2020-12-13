@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { VictoryLine } from 'victory-native';
 
-import { max, mean, min } from 'd3';
+import { mean, min } from 'd3';
 
 import globalStyles from '../../../styles';
 
@@ -11,7 +11,7 @@ export default function DiaryGraph({ data }) {
 
   return (
     <View style={styles.container}>
-      <Text style={[styles.labelText, styles.labelTextY]}>Movement (%)</Text>
+      <Text style={[styles.labelText, styles.labelTextY]}>Movement</Text>
       <View style={styles.graphWrapper}>
         <VictoryLine
           height={150}
@@ -19,7 +19,7 @@ export default function DiaryGraph({ data }) {
           x="elapsedTime"
           y="deviation"
           labels={({ datum }) => (datum.rem ? 'R' : '')}
-          domain={{ y: [min(mappedData), max(mappedData) * 0.8] }}
+          domain={{ y: [min(mappedData), mean(mappedData) * 2] }}
           padding={{ left: 70, right: 40, top: 20, bottom: 20 }}
           style={{
             data: {

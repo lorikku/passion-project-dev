@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { selectDiary } from '../../store/diarySlice';
+import { selectDiary, setEntryAudioUriAsyc } from '../../store/diarySlice';
 
 import BackIcon from '../../components/svg/elements/BackIcon';
 import globalStyles from '../../styles';
@@ -21,6 +21,18 @@ export default DiaryDetail = ({ navigation, route }) => {
   const loadedEntry = diary.find(
     (entry) => entry.trackerName === route.params.trackerName
   );
+
+  //Delete audio
+  const deleteAudio = async () => {
+    console.log('-------------- deleting recording --------------');
+    dispatch(
+      setEntryAudioUriAsyc({
+        trackerName: loadedEntry.trackerName,
+        oldAudioUri: loadedEntry.audioUri,
+        newCacheUri: undefined,
+      })
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -40,10 +52,13 @@ export default DiaryDetail = ({ navigation, route }) => {
       {route.params.recordAudio ? (
         <EntryRecordAudio
           navigation={navigation}
-          trackerName={route.params.trackerName}
+          trackerName={loadedEntry.trackerName}
+          currentAudioUri={loadedEntry.audioUri}
+          audioSaving={loadedEntry.audioSaving}
+          deleteAudio={deleteAudio}
         />
       ) : (
-        <EntryDetail navigation={navigation} entry={loadedEntry} />
+        <EntryDetail navigation={navigation} deleteAudio={deleteAudio} entry={loadedEntry} />
       )}
     </View>
   );

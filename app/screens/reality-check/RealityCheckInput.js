@@ -152,7 +152,7 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     borderRadius: 30,
     paddingHorizontal: 30,
-    paddingVertical: 20,
+    paddingVertical: Platform.OS === 'ios' ? 17 : 10,
   },
   addButtonText: {
     color: globalStyles.color.background,

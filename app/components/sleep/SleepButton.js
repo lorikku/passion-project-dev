@@ -3,9 +3,9 @@ import { Alert } from 'react-native';
 import * as Brightness from 'expo-brightness';
 import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addDiaryEntry, makeEntryAvailible} from '../../store/diarySlice';
-import { toggleTracker } from '../../store/trackerSlice';
+import { selectTracker, toggleTracker } from '../../store/trackerSlice';
 import trackerTools from './trackerTools';
 
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -13,6 +13,7 @@ import SleepIcon from '../svg/elements/SleepIcon';
 
 export default SleepButton = ({ navigation, active }) => {
   const dispatch = useDispatch();
+  const tracker = useSelector(selectTracker);
 
   const handleTrackerToggle = () => {
     if (active) {
@@ -35,7 +36,7 @@ export default SleepButton = ({ navigation, active }) => {
               //Disable tracker
               dispatch(toggleTracker(undefined));
               //Make tracker availible in list
-              dispatch(makeEntryAvailible(active))
+              dispatch(makeEntryAvailible(tracker.activeTracker))
               //To let screen sleep
               deactivateKeepAwake('tracker');
               //Navigate to diary list first to load it in as "first stack"
