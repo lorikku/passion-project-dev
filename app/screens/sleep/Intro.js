@@ -4,16 +4,22 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import * as Brightness from 'expo-brightness';
 
 import { useDispatch } from 'react-redux';
-import { disableFirstTime } from '../../store/uiSlice';
+import { disableFirstTime, toggleFullScreen } from '../../store/uiSlice';
 
-import IntroBg from '../../components/svg/intro/IntroBg';
+import Bg from '../../components/svg/intro/Bg';
 import ArrowRight from '../../components/svg/intro/ArrowRight';
 import globalStyles from '../../styles';
 
-export default Intro = () => {
+export default Intro = ({ navigation }) => {
   const dispatch = useDispatch();
-  const onStartPress = () => {
 
+  const handleNav = () => {
+    navigation.navigate('Sleep');
+    navigation.navigate('Tutorial');
+    dispatch(disableFirstTime());
+  };
+
+  const onStartPress = () => {
     //Permissions required only for android
     if (Platform.OS === 'android') {
       Alert.alert(
@@ -23,21 +29,21 @@ export default Intro = () => {
           {
             text: 'Give permissions',
             onPress: () => {
-              Brightness.requestPermissionsAsync().then(() =>
-                dispatch(disableFirstTime())
-              );
+              Brightness.requestPermissionsAsync().then(() => {
+                handleNav();
+              });
             },
           },
         ],
         { cancelable: false }
       );
     } else {
-      dispatch(disableFirstTime());
+      handleNav();
     }
   };
   return (
     <View style={styles.container}>
-      <IntroBg style={{ ...StyleSheet.absoluteFillObject }} />
+      <Bg style={{ ...StyleSheet.absoluteFillObject }} />
       <View style={styles.textWrapper}>
         <Text style={styles.title}>Lucidy</Text>
         <TouchableOpacity style={styles.button} onPress={onStartPress}>

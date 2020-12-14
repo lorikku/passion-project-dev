@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Svg, { Path, Defs, LinearGradient, Stop } from 'react-native-svg';
 
-function IntroBg() {
+function Bg() {
   return (
     <Svg
       width={'100%'}
@@ -53,4 +53,4 @@ function IntroBg() {
   );
 }
 
-export default IntroBg;
+export default Bg;

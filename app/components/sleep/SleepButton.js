@@ -14,6 +14,7 @@ import trackerTools from './trackerTools';
 
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import SleepIcon from '../svg/elements/SleepIcon';
+import { toggleFullScreen } from '../../store/uiSlice';
 
 export default SleepButton = ({ navigation, active }) => {
   const dispatch = useDispatch();
@@ -29,6 +30,11 @@ export default SleepButton = ({ navigation, active }) => {
       let message = 'Are you sure you want to stop tracking your sleep?';
       if (analysisDataTooShort)
         message += " You don't have enough data for a new entry!";
+
+      Brightness.getPermissionsAsync().then(
+        ({ status }) =>
+          status === 'granted' && Brightness.setBrightnessAsync(0.05)
+      );
 
       Alert.alert(
         'Wakey wakey!',
@@ -49,6 +55,8 @@ export default SleepButton = ({ navigation, active }) => {
               dispatch(toggleTracker(undefined));
               //To let screen sleep
               deactivateKeepAwake('tracker');
+              //Disable fullscreen
+              dispatch(toggleFullScreen(false));
               //Make tracker availible in list
               if (analysisDataTooShort) {
                 dispatch(makeEntryAvailible('remove'));
@@ -86,6 +94,8 @@ export default SleepButton = ({ navigation, active }) => {
       dispatch(addDiaryEntry(fileName));
       //To keep screen awake
       activateKeepAwake('tracker');
+      //Enable fullscreen
+      dispatch(toggleFullScreen(true));
     }
   };
 

@@ -88,7 +88,7 @@ export default TrackerHandler = ({ active }) => {
         console.log(
           'PERSON IS DEFINETELY PARALYZED -> REM PHASE! #' + noDeviation
         );
-        // playbackObject.playFromPositionAsync(0);
+        playbackObject.playFromPositionAsync(0); //Plays soft sound whenever REM is detected!
         setNoDeviation(0);
 
         //Report REM detection to last analysis element IF there was no REM detected in last "max noDeviation"
@@ -116,22 +116,25 @@ export default TrackerHandler = ({ active }) => {
 
   //Loading audio object
   React.useEffect(() => {
-    if (!playbackObject) {
+    if (active) {
       const fetchAudioAsync = async () => {
         const res = await Audio.Sound.createAsync(
-          require('../../assets/audio/sample.mp3'),
+          require('../../assets/audio/rem.mp3'),
           { shouldPlay: false }
         );
         setPlaybackObject(res.sound);
       };
       fetchAudioAsync();
+    } else {
+      if (playbackObject) {
+        playbackObject
+          .stopAsync()
+          .then(
+            playbackObject.unloadAsync().then(setPlaybackObject(undefined))
+          );
+      }
     }
-
-    //Unload playbackObject when component unmounts
-    return () =>
-      playbackObject &&
-      playbackObject.unloadAsync().then(setPlaybackObject(undefined));
-  }, []);
+  }, [active]);
 
   //Timer component and accelerohandler which returns nothing
   return (

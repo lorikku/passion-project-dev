@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { VictoryLine } from 'victory-native';
 
-import { max, mean, min } from 'd3';
+import { mean, min } from 'd3';
 
 import globalStyles from '../../../styles';
 

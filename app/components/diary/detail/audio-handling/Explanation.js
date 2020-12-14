@@ -5,7 +5,7 @@ import globalStyles from '../../../../styles';
 export default Explanation = ({ audioUri }) => {
   return !audioUri ? (
     <View>
-      <Text style={styles.headerText}>Hope you had a lucid dream :)</Text>
+      <Text style={styles.headerText}>Hope you had a lucid dream! &#128513;</Text>
       <Text style={styles.bodyText}>
         Keeping track of your dreams is important so that you can get a sense of
         your personal dream patterns.{'\n'}By memorizing these, you will be able

@@ -12,27 +12,9 @@ import StatusDisplay from './audio-handling/StatusDisplay';
 
 import globalStyles from '../../../styles';
 
-const RECORDING_OPTIONS_PRESET_LOW_QUALITY = {
-  android: {
-    extension: '.3gp',
-    outputFormat: Audio.RECORDING_OPTION_ANDROID_OUTPUT_FORMAT_THREE_GPP,
-    audioEncoder: Audio.RECORDING_OPTION_ANDROID_AUDIO_ENCODER_AMR_NB,
-    sampleRate: 44100,
-    numberOfChannels: 2,
-    bitRate: 128000,
-  },
-  ios: {
-    extension: '.mp3',
-    audioQuality: Audio.RECORDING_OPTION_IOS_AUDIO_QUALITY_MIN,
-    sampleRate: 44100,
-    numberOfChannels: 2,
-    bitRate: 128000,
-    linearPCMBitDepth: 16,
-    linearPCMIsBigEndian: false,
-    linearPCMIsFloat: false,
-  },
-};
-
+//Variable used when component unmounts, scroll down to "emergencyStopRecording" for more
+let recordingStateAtUnmount = undefined;
+const recordingMax = 60;
 const messages = {
   IDLE: 'No recording made',
   PERMISSIONS: 'Checking permissions',
@@ -40,8 +22,6 @@ const messages = {
   RUN: 'run',
   SAVING: 'Saving recorded audio',
 };
-//Variable used when component unmounts, scroll down to "emergencyStopRecording" for more
-let recordingStateAtUnmount = undefined;
 
 //Component for prompting to record dream/audio
 export default EntryRecordAudio = ({
@@ -152,10 +132,13 @@ export default EntryRecordAudio = ({
   //Subscribing to status and update time
   React.useEffect(() => {
     if (recordingObject) {
-      recordingObject.setProgressUpdateInterval(1000);
+      recordingObject.setProgressUpdateInterval(500);
       recordingObject.setOnRecordingStatusUpdate((status) => {
         if (status.isRecording) {
           setTimeElapsed(status.durationMillis);
+          if(status.durationMillis / 1000 >= recordingMax) {
+            stopRecording();
+          }
         }
       });
     }
@@ -167,7 +150,6 @@ export default EntryRecordAudio = ({
   return (
     <View style={styles.contentWrapper}>
       <Explanation audioUri={currentAudioUri} />
-      {/* Time tracking */}
       <StatusDisplay
         audioSaving={audioSaving}
         currentAudioUri={currentAudioUri}
@@ -176,8 +158,8 @@ export default EntryRecordAudio = ({
         message={message}
         messages={messages}
         deleteAudio={deleteAudio}
+        recordingMax={recordingMax}
       />
-      {/* Buttons */}
       <RecordButtons
         disabledButton={disabledButton}
         recordingObject={recordingObject}

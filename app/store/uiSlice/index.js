@@ -13,9 +13,8 @@ export const uiSlice = createSlice({
       state.fullScreen = action.payload;
     },
     disableFirstTime: (state) => {
-      state.fullScreen = false;
       state.firstTime = false;
-    },
+    }
   },
 });
 

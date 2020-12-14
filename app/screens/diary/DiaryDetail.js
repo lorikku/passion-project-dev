@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,14 +23,29 @@ export default DiaryDetail = ({ navigation, route }) => {
   );
 
   //Delete audio
-  const deleteAudio = async () => {
-    console.log('-------------- deleting recording --------------');
-    dispatch(
-      setEntryAudioUriAsyc({
-        trackerName: loadedEntry.trackerName,
-        oldAudioUri: loadedEntry.audioUri,
-        newCacheUri: undefined,
-      })
+  const deleteAudio = () => {
+    Alert.alert(
+      'Delete this recording?',
+      'Are you sure you want to delete this recording?',
+      [
+        {
+          text: 'No, keep it',
+        },
+        {
+          text: "Yes, I'm sure",
+          onPress: () => {
+            console.log('-------------- deleting recording --------------');
+            dispatch(
+              setEntryAudioUriAsyc({
+                trackerName: loadedEntry.trackerName,
+                oldAudioUri: loadedEntry.audioUri,
+                newCacheUri: undefined,
+              })
+            );
+          },
+        },
+      ],
+      { cancelable: false }
     );
   };
 
@@ -58,7 +73,11 @@ export default DiaryDetail = ({ navigation, route }) => {
           deleteAudio={deleteAudio}
         />
       ) : (
-        <EntryDetail navigation={navigation} deleteAudio={deleteAudio} entry={loadedEntry} />
+        <EntryDetail
+          navigation={navigation}
+          deleteAudio={deleteAudio}
+          entry={loadedEntry}
+        />
       )}
     </View>
   );

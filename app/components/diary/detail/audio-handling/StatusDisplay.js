@@ -13,6 +13,7 @@ export default StatusDisplay = ({
   message,
   messages,
   deleteAudio,
+  recordingMax
 }) => {
   //Function to parse time
   const getTime = (timeToParse) => {
@@ -22,7 +23,7 @@ export default StatusDisplay = ({
       res += '0';
     }
     res += time.toString();
-    res += '/90s';
+    res += '/' + recordingMax.toString() + 's';
     return res;
   };
 

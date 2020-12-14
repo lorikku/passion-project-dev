@@ -67,8 +67,6 @@ export default ConrolButtons = ({
         if (status.didJustFinish) {
           if (audioPlaying) {
             playbackObject.stopAsync().then(setAudioPlaying(false));
-          } else {
-            console.log('wot... wot happened');
           }
         }
       });
