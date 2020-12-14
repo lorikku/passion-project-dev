@@ -4,7 +4,11 @@ import * as Brightness from 'expo-brightness';
 import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { addDiaryEntry, makeEntryAvailible} from '../../store/diarySlice';
+import {
+  addDiaryEntry,
+  makeEntryAvailible,
+  selectDiary,
+} from '../../store/diarySlice';
 import { selectTracker, toggleTracker } from '../../store/trackerSlice';
 import trackerTools from './trackerTools';
 
@@ -13,14 +17,22 @@ import SleepIcon from '../svg/elements/SleepIcon';
 
 export default SleepButton = ({ navigation, active }) => {
   const dispatch = useDispatch();
+
+  const diary = useSelector(selectDiary);
+  const analysisDataTooShort = diary[0].analysisData.length < 5;
+
   const tracker = useSelector(selectTracker);
 
   const handleTrackerToggle = () => {
     if (active) {
       /* STOPPING TRACKING SESSION */
+      let message = 'Are you sure you want to stop tracking your sleep?';
+      if (analysisDataTooShort)
+        message += " You don't have enough data for a new entry!";
+
       Alert.alert(
         'Wakey wakey!',
-        'Are you sure you want to stop tracking your sleep?',
+        message,
         [
           {
             text: "No, I'll continue sleeping",
@@ -35,22 +47,26 @@ export default SleepButton = ({ navigation, active }) => {
               );
               //Disable tracker
               dispatch(toggleTracker(undefined));
-              //Make tracker availible in list
-              dispatch(makeEntryAvailible(tracker.activeTracker))
               //To let screen sleep
               deactivateKeepAwake('tracker');
-              //Navigate to diary list first to load it in as "first stack"
-              navigation.navigate('DiaryScreen', {
-                screen: 'Diary',
-              });
-              //Then navigate to diary detail
-              navigation.navigate('DiaryScreen', {
-                screen: 'DiaryDetail',
-                params: {
-                  trackerName: active,
-                  recordAudio: true
-                },
-              });
+              //Make tracker availible in list
+              if (analysisDataTooShort) {
+                dispatch(makeEntryAvailible('remove'));
+              } else {
+                dispatch(makeEntryAvailible(tracker.activeTracker));
+                //Navigate to diary list first to load it in as "first stack"
+                navigation.navigate('DiaryScreen', {
+                  screen: 'Diary',
+                });
+                //Then navigate to diary detail
+                navigation.navigate('DiaryScreen', {
+                  screen: 'DiaryDetail',
+                  params: {
+                    trackerName: active,
+                    recordAudio: true,
+                  },
+                });
+              }
             },
           },
         ],

@@ -10,13 +10,13 @@ const titles = ['Are you dreaming?', 'Reality check!', 'Is this reality?'];
 //Notification triggers based off of selected frequency
 const triggers = {
   low: {
-    seconds: 5 * 60, //5 minutes
+    seconds: 2 * 60 * 60, //2 hours
   },
   medium: {
-    seconds: 2 * 60, //2 minutes
+    seconds: 15 * 60, //15 minutes
   },
   high: {
-    seconds: 5,
+    seconds: 60, //60 seconds, for debugging purposes
   },
 };
 

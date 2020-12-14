@@ -88,7 +88,7 @@ export default TrackerHandler = ({ active }) => {
         console.log(
           'PERSON IS DEFINETELY PARALYZED -> REM PHASE! #' + noDeviation
         );
-        playbackObject.playFromPositionAsync(0);
+        // playbackObject.playFromPositionAsync(0);
         setNoDeviation(0);
 
         //Report REM detection to last analysis element IF there was no REM detected in last "max noDeviation"

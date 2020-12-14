@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Svg, { Rect } from 'react-native-svg';
 
-function Pause() {
+function Stop() {
   return (
     <Svg
       width={27}
@@ -15,4 +15,4 @@ function Pause() {
   );
 }
 
-export default Pause;
+export default Stop;

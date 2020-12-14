@@ -28,7 +28,11 @@ export const diarySlice = createSlice({
     makeEntryAvailible: (state, action) => {
       const entry = findEntry(state, action.payload);
       if (entry) {
-        entry.availible = true;
+        if (action.payload === 'remove') {
+          state.shift();
+        } else {
+          entry.availible = true;
+        }
       }
     },
     deleteDiaryEntry: (state, action) => {
@@ -66,7 +70,7 @@ export const diarySlice = createSlice({
   //Reducers from thunks
   extraReducers: {
     [setEntryAudioUriThunk.rejected]: (state, action) => {
-      FileSystem.deleteAsync(action.meta.arg.oldAudioUri)
+      FileSystem.deleteAsync(action.meta.arg.oldAudioUri);
     },
     [setEntryAudioUriThunk.pending]: (state, action) => {
       const { trackerName } = action.meta.arg;

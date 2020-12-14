@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
   },
   bodyText: {
     ...globalStyles.text.default,
-    color: globalStyles.color.gray,
+    color: globalStyles.color.yellow,
     fontSize: 14,
   },
   remWrapper: {

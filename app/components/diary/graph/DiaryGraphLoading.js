@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     backgroundColor: globalStyles.color.blue,
     borderRadius: 20,
     padding: 10,
-    height: 188,
+    height: 220,
 
     flexDirection: 'row',
     justifyContent: 'center',

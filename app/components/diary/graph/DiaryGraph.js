@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { VictoryLine } from 'victory-native';
 
-import { mean, min } from 'd3';
+import { max, mean, min } from 'd3';
 
 import globalStyles from '../../../styles';
 
@@ -14,7 +14,8 @@ export default function DiaryGraph({ data }) {
       <Text style={[styles.labelText, styles.labelTextY]}>Movement</Text>
       <View style={styles.graphWrapper}>
         <VictoryLine
-          height={150}
+          interpolation={'basis'}
+          height={180}
           data={data}
           x="elapsedTime"
           y="deviation"

@@ -30,7 +30,7 @@ export default EntryDetail = ({ navigation, entry, deleteAudio }) => {
         <Text style={styles.headerText}>Recorded dream</Text>
         {entry.audioUri ? (
           <ControlButtons
-            propStyle={{ marginTop: 20}}
+            propStyle={{ marginTop: 30}}
             audioUri={entry.audioUri}
             deleteAudio={deleteAudio}
             navigateToRecordAudio={navigateToRecordAudio}
@@ -79,5 +79,10 @@ const styles = StyleSheet.create({
     ...globalStyles.text.default,
     color: globalStyles.color.gray,
     fontSize: 16,
+  },
+  loading: {
+    fontFamily: globalStyles.text.compact.fontFamily,
+    color: globalStyles.color.white,
+    fontSize: 18,
   },
 });

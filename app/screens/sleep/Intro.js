@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Alert, StyleSheet, Text, View } from 'react-native';
+import { Alert, Platform, StyleSheet, Text, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import * as Brightness from 'expo-brightness';
 
@@ -13,21 +13,27 @@ import globalStyles from '../../styles';
 export default Intro = () => {
   const dispatch = useDispatch();
   const onStartPress = () => {
-    Alert.alert(
-      'Permissions',
-      'Lucidy needs permissions to write system settings. We use this to edit your brightness level when tracking your sleep. This would drastically save your battery life.',
-      [
-        {
-          text: 'Give permissions',
-          onPress: () => {
-            Brightness.requestPermissionsAsync().then(() =>
-              dispatch(disableFirstTime())
-            );
+
+    //Permissions required only for android
+    if (Platform.OS === 'android') {
+      Alert.alert(
+        'Permissions',
+        'Lucidy needs permissions to write system settings. We use this to edit your brightness level when tracking your sleep. This would drastically save your battery life.',
+        [
+          {
+            text: 'Give permissions',
+            onPress: () => {
+              Brightness.requestPermissionsAsync().then(() =>
+                dispatch(disableFirstTime())
+              );
+            },
           },
-        },
-      ],
-      { cancelable: false }
-    );
+        ],
+        { cancelable: false }
+      );
+    } else {
+      dispatch(disableFirstTime());
+    }
   };
   return (
     <View style={styles.container}>

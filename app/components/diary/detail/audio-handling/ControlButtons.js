@@ -1,13 +1,19 @@
 import * as React from 'react';
-import { StyleSheet, TouchableOpacity, View, Text } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { Audio } from 'expo-av';
 
-import EditButton from './buttons/EditButton';
-import PlayButton from './buttons/PlayButton';
-import DeleteButton from './buttons/DeleteButton';
-import PauseButton from './buttons/PauseButton';
+import ControlButton from './ControlButton';
+
 import globalStyles from '../../../../styles';
 
+const buttons = {
+  PLAY: 'play',
+  STOP: 'stop',
+  EDIT: 'edit',
+  DELETE: 'delete',
+};
+
+let playbackAtUnMount = undefined;
 export default ConrolButtons = ({
   navigateToRecordAudio,
   audioUri,
@@ -25,18 +31,23 @@ export default ConrolButtons = ({
           { uri: audioUri },
           { shouldPlay: false }
         );
+
         setPlaybackObject(res.sound);
       };
       fetchAudioAsync();
     }
 
-    //Unload playbackObject when component unmounts
-    return () =>
-      playbackObject &&
-      playbackObject.unloadAsync().then(setPlaybackObject(undefined));
+    return () => {
+      playbackAtUnMount &&
+        playbackAtUnMount
+          .stopAsync()
+          .then(
+            playbackAtUnMount.unloadAsync().then(setPlaybackObject(undefined))
+          );
+    };
   }, []);
 
-  const playAudio = async () => {
+  const handleAudio = async () => {
     if (audioPlaying) {
       await playbackObject.stopAsync();
       setAudioPlaying(false);
@@ -47,32 +58,36 @@ export default ConrolButtons = ({
   };
 
   React.useEffect(() => {
+    playbackAtUnMount = playbackObject;
+  }, [playbackObject]);
+
+  React.useEffect(() => {
     if (audioPlaying) {
-      playbackObject;
+      playbackObject.setOnPlaybackStatusUpdate((status) => {
+        if (status.didJustFinish) {
+          if (audioPlaying) {
+            playbackObject.stopAsync().then(setAudioPlaying(false));
+          } else {
+            console.log('wot... wot happened');
+          }
+        }
+      });
     }
-  }, [audioPlaying]);
+  }, [playbackObject, audioPlaying]);
 
   return playbackObject ? (
     <View style={[styles.recordedWrapper, propStyle]}>
       {!audioPlaying ? (
-        <TouchableOpacity onPress={playAudio}>
-          <PlayButton />
-        </TouchableOpacity>
+        <ControlButton name={buttons.PLAY} onPress={handleAudio} />
       ) : (
-        <TouchableOpacity onPress={playAudio}>
-          <PauseButton />
-        </TouchableOpacity>
+        <ControlButton name={buttons.STOP} onPress={handleAudio} />
       )}
 
-      {navigateToRecordAudio ? (
-        <TouchableOpacity onPress={navigateToRecordAudio}>
-          <EditButton />
-        </TouchableOpacity>
-      ) : null}
+      {navigateToRecordAudio && (
+        <ControlButton name={buttons.EDIT} onPress={navigateToRecordAudio} />
+      )}
 
-      <TouchableOpacity onPress={deleteAudio}>
-        <DeleteButton />
-      </TouchableOpacity>
+      <ControlButton name={buttons.DELETE} onPress={deleteAudio} />
     </View>
   ) : (
     <Text style={styles.loading}>Loading recording...</Text>

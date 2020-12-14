@@ -7,7 +7,7 @@ export const setEntryAudioUriThunk = createAsyncThunk(
   async ({ trackerName, oldAudioUri, newCacheUri }) => {
     console.log('thunk started');
     //Initializing neecessary variables
-    let newDocumentUri = newCacheUri;
+    let newDocumentUri = newCacheUri; // !!!!!!!!! SET BACK TO UNDEFINED IF YOU WANT THE MOVING TO WORK TOO !!!!!!!!!
     const directoryUri = FileSystem.documentDirectory + 'Audio/';
     const infoOptions = { md5: false, size: false };
 
