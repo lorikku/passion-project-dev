@@ -1,23 +1,26 @@
-# Lucid Dreaming
+# Lucidy
+Lucidy is een app die mensen helpt met lucide dromen ervaren.
 
-## Doelpubliek en onderzoeksvraag
+## Omschrijving
+
+### Doelpubliek en onderzoeksvraag
 
 Heel vaak hoor ik van mensen rond me heen dat ze totaal niet dromen, laat staan lucide dromen hebben. Daarom koos ik deze mensen als mijn doelpubliek. 
 
 
-Is het mogelijk om mensen te trainen om meer te dromen? Is het mogelijk om hun te helpen met lucide dromen? Hoe kan ik mensen helpen hun dromen onthouden?
+Is het mogelijk om hun te helpen met lucide dromen? Hoe kan ik mensen helpen hun dromen onthouden? Hoe kan iemand weten wanneer hij/zij aan het dromen is?
 
-## Wat zijn lucide dromen?
+### Wat zijn lucide dromen?
 
 Iedereen droomt. De ene meer dan het andere. Maar dan heb je ook mensen die vaak lucide dromen ondervinden. Maar wat is dat juist?
 
 Een lucide droom is eigenlijk een droom waarbij iemand van het feit bewust is dat hij/zij aan het dromen is. Hierdoor heeft de dromer totale controle over zijn droom, en kan de dromer kiezen wat hij/zij wil doen in de droom.
 
-## Core Project Statement
+### Core Project Statement
 
-Een Expo React Native app dat mensen zal assisteren om beter hun dromen te onthouden EN in het bijzonder 'lucide dromen' te ervaren. De app zal hun slaapritme snachts tracken en op verschillende manieren de gebruiker aanleren hoe ze hun dromen kunnen onthouden.
+Een Expo React Native app dat mensen zal assisteren om beter hun dromen te onthouden EN in het bijzonder 'lucide dromen' te ervaren. De app zal hun slaapritme snachts tracken en op verschillende manieren de gebruiker aanleren hoe ze lucide dromen kunnen ervaren.
 
-## Opsomming van de deliverables
+### Opsomming van de deliverables
 
 - Week 1: Research & app design
 - Week 2: Uitwerking van de algemene flow (navigatie, design)
@@ -25,15 +28,16 @@ Een Expo React Native app dat mensen zal assisteren om beter hun dromen te ontho
 - Week 4: Koppeling van redux state management aan de app
 - Week 5: Afwerking & indienen
 
-## Blog Url
+### Blog Url
 
 https://lorikku.wixsite.com/mysite
 
-# Installation
+## Installation
 
-This app is meant for **physical** iOS and Android devices.  
+This app is meant for **physical** iOS and Android devices. The Tracker function will not work on simulators, since they don't have an accelerometer.  
+Follow these steps to install and run it.
 
-## Expo CLI
+### Expo CLI
 You will first need the Expo CLI to run this project:  
 ```
 yarn global add expo-cli
@@ -48,7 +52,7 @@ Android: https://play.google.com/store/apps/details?id=host.exp.exponent&hl=en_U
 
 3. Login on the Expo App using your Expo login credentials.
 
-## Starting project
+### Starting project
 
 First of all, make sure you smartphone is on the same network as your PC.  
 After cloning this repo, open the folder and type following commands in terminal:
