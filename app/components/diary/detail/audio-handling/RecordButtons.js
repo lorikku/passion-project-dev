@@ -9,6 +9,7 @@ export default RecordButtons = ({
   startRecording,
   stopRecording,
   navigateToEntryDetail,
+  currentAudioUri,
 }) => {
   return (
     <View style={{ alignItems: 'center', opacity: disabledButton ? 0.4 : 1 }}>
@@ -43,7 +44,7 @@ export default RecordButtons = ({
       </TouchableOpacity>
       {!recordingObject && (
         <Text onPress={navigateToEntryDetail} style={styles.recordLater}>
-          I'll do this later
+          {currentAudioUri ? 'Go to detail page' : "I'll do this later"}
         </Text>
       )}
     </View>

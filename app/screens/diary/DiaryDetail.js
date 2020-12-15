@@ -22,31 +22,37 @@ export default DiaryDetail = ({ navigation, route }) => {
     (entry) => entry.trackerName === route.params.trackerName
   );
 
-  //Delete audio
-  const deleteAudio = () => {
-    Alert.alert(
-      'Delete this recording?',
-      'Are you sure you want to delete this recording?',
-      [
-        {
-          text: 'No, keep it',
-        },
-        {
-          text: "Yes, I'm sure",
-          onPress: () => {
-            console.log('-------------- deleting recording --------------');
-            dispatch(
-              setEntryAudioUriAsyc({
-                trackerName: loadedEntry.trackerName,
-                oldAudioUri: loadedEntry.audioUri,
-                newCacheUri: undefined,
-              })
-            );
-          },
-        },
-      ],
-      { cancelable: false }
+  const handleDeletion = () => {
+    console.log('-------------- deleting recording --------------');
+    dispatch(
+      setEntryAudioUriAsyc({
+        trackerName: loadedEntry.trackerName,
+        oldAudioUri: loadedEntry.audioUri,
+        newCacheUri: undefined,
+      })
     );
+  };
+
+  //Delete audio
+  const deleteAudio = (overwrite) => {
+    if (!overwrite) {
+      Alert.alert(
+        'Delete this recording?',
+        'Are you sure you want to delete this recording?',
+        [
+          {
+            text: 'No, keep it',
+          },
+          {
+            text: "Yes, I'm sure",
+            onPress: () => handleDeletion(),
+          },
+        ],
+        { cancelable: false }
+      );
+    } else {
+      handleDeletion();
+    }
   };
 
   return (

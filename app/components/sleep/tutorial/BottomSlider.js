@@ -55,7 +55,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     width: 220,
-    marginBottom: -20,
   },
   dotWrapper: {
     flexDirection: 'row',

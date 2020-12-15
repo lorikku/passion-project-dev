@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import { useDispatch } from 'react-redux';
 import { toggleFullScreen } from '../../store/uiSlice';
@@ -27,6 +26,10 @@ const tutorialPages = [
     content:
       'Step 1: Activate the tracker by clicking on the huge button you find on the “Sleep” tab.\n\nStep 2: Put your phone on your bed, next to you. Charging is not necessary unless your phone is under 20% battery. (Scared of radiation? Turn on airplane mode!)\n\nStep 3: Sleep, and click the button again whenever you wake up!',
   },
+  {
+    title: 'One last thing!',
+    content: "KEEP YOUR SCREEN ON WHILE TRACKING!\n\nDon’t lock your screen while tracking, otherwise the app won’t work. You don’t have to worry about the screen locking automatically, Lucidy prevents that.\n\nThis app is also optimized for battery usage, and will automatically lower your brightness to save battery."
+  }
 ];
 
 export default Intro = ({ navigation }) => {
@@ -71,7 +74,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginVertical: 60,
+    marginTop: 50,
+    marginBottom: 30
   },
   title: {
     fontFamily: globalStyles.text.title.fontFamily,

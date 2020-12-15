@@ -28,14 +28,16 @@ export default Sleep = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.headerWrapper}>
-        <View style={{ opacity: 0 }}>
+        <View
+          style={{ opacity: 0, marginLeft: !tracker.activeTracker ? 20 : -20 }}
+        >
           <Help />
         </View>
         <Text style={styles.subtitle}>
           {tracker.activeTracker ? 'Tracking' : 'Standby'}
         </Text>
         <TouchableOpacity style={styles.backButton} onPress={navigateToHelp}>
-          <Help />
+          {!tracker.activeTracker && <Help />}
         </TouchableOpacity>
       </View>
       <View style={styles.buttonWrapper}>

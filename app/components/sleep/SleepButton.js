@@ -15,12 +15,16 @@ import trackerTools from './trackerTools';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import SleepIcon from '../svg/elements/SleepIcon';
 import { toggleFullScreen } from '../../store/uiSlice';
+import { Accelerometer } from 'expo-sensors';
 
 export default SleepButton = ({ navigation, active }) => {
   const dispatch = useDispatch();
 
   const diary = useSelector(selectDiary);
-  const analysisDataTooShort = diary[0].analysisData.length < 5;
+  let analysisDataTooShort;
+  if (diary[0]) {
+    analysisDataTooShort = diary[0].analysisData.length < 5;
+  }
 
   const tracker = useSelector(selectTracker);
 
@@ -33,7 +37,7 @@ export default SleepButton = ({ navigation, active }) => {
 
       Brightness.getPermissionsAsync().then(
         ({ status }) =>
-          status === 'granted' && Brightness.setBrightnessAsync(0.05)
+          status === 'granted' && Brightness.setBrightnessAsync(0.1)
       );
 
       Alert.alert(
@@ -42,6 +46,11 @@ export default SleepButton = ({ navigation, active }) => {
         [
           {
             text: "No, I'll continue sleeping",
+            onPress: () =>
+              Brightness.getPermissionsAsync().then(
+                ({ status }) =>
+                  status === 'granted' && Brightness.setBrightnessAsync(0)
+              ),
           },
           {
             text: "Yes, I'm awake!",
@@ -82,20 +91,30 @@ export default SleepButton = ({ navigation, active }) => {
       );
     } else {
       /* NEW TRACKING SESSION */
-      //Set lowest possible brightness to save batteries
-      Brightness.getPermissionsAsync().then(
-        ({ status }) => status === 'granted' && Brightness.setBrightnessAsync(0)
-      );
-      //Generate a filename and activate tracker
-      const fileName = trackerTools.generateFileName();
-      //Activate tracker with filename (used as id)
-      dispatch(toggleTracker(fileName));
-      //Add a new entry to the diary with filename (used as id)
-      dispatch(addDiaryEntry(fileName));
-      //To keep screen awake
-      activateKeepAwake('tracker');
-      //Enable fullscreen
       dispatch(toggleFullScreen(true));
+      Accelerometer.isAvailableAsync().then((availible) => {
+        if (availible) {
+          //Set lowest possible brightness to save batteries
+          Brightness.getPermissionsAsync().then(
+            ({ status }) =>
+              status === 'granted' && Brightness.setBrightnessAsync(0)
+          );
+          //Generate a filename and activate tracker
+          const fileName = trackerTools.generateFileName();
+          //Activate tracker with filename (used as id)
+          dispatch(toggleTracker(fileName));
+          //Add a new entry to the diary with filename (used as id)
+          dispatch(addDiaryEntry(fileName));
+          //To keep screen awake
+          activateKeepAwake('tracker');
+        } else {
+          Alert.alert(
+            'Oops!',
+            "Seems like Lucidy can not detect an accelerometer. This feature won't work without it. Perhaps you're running this app on a simulator?"
+          );
+          dispatch(toggleFullScreen(false));
+        }
+      });
     }
   };
 

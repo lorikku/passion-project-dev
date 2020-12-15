@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 import { Audio } from 'expo-av';
 import * as FileSystem from 'expo-file-system';
 
@@ -47,8 +47,36 @@ export default EntryRecordAudio = ({
   //Recording states
   const [recordingObject, setRecordingObject] = React.useState(false);
 
+  const handleRecordingOverwrite = () => {
+    Alert.alert(
+      'Are you sure?',
+      'This will replace your previous recording!',
+      [
+        {
+          text: 'No, keep it',
+        },
+        {
+          text: "Yes, I'm sure",
+          onPress: () => {
+            startRecording({overwrite: true});
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
   //Normal start recording functionc
-  const startRecording = async () => {
+  const startRecording = async ({overwrite}) => {
+    if (!overwrite) {
+      if (currentAudioUri) {
+        handleRecordingOverwrite();
+        return;
+      }
+    } else {
+      deleteAudio(overwrite)
+    }
+
     setDisabledButton(true);
 
     //Get permissions
@@ -136,7 +164,7 @@ export default EntryRecordAudio = ({
       recordingObject.setOnRecordingStatusUpdate((status) => {
         if (status.isRecording) {
           setTimeElapsed(status.durationMillis);
-          if(status.durationMillis / 1000 >= recordingMax) {
+          if (status.durationMillis / 1000 >= recordingMax) {
             stopRecording();
           }
         }
@@ -166,6 +194,7 @@ export default EntryRecordAudio = ({
         startRecording={startRecording}
         stopRecording={stopRecording}
         navigateToEntryDetail={navigateToEntryDetail}
+        currentAudioUri={currentAudioUri}
       />
     </View>
   );

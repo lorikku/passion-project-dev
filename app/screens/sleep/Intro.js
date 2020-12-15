@@ -4,7 +4,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import * as Brightness from 'expo-brightness';
 
 import { useDispatch } from 'react-redux';
-import { disableFirstTime, toggleFullScreen } from '../../store/uiSlice';
+import { disableFirstTime } from '../../store/uiSlice';
 
 import Bg from '../../components/svg/intro/Bg';
 import ArrowRight from '../../components/svg/intro/ArrowRight';
