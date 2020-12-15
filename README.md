@@ -62,6 +62,8 @@ yarn && yarn prod
 ```
 The Metro Bundler should start, and you should be able to see the project availible in your Expo App. You can now access it by opening it. If you don't see it, try refreshing the Expo App or scanning the QR code in the Metro Bundler.
 
+If you get "There was a problem..." just retry until it works. This is because the app 'too long to load' and 'timed out', but it's normal when you start up the project for the first time.
+
 `yarn prod` will run the app as if it was completely built as a standalone version.  
 Alternatively, you can also run `yarn dev` if you want to access development mode instead.
 
